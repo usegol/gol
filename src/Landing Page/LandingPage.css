@@ -1,0 +1,65 @@
+
+.main-nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0px;
+    gap: 391px;
+
+    position: absolute;
+    width: 676.12px;
+    height: 31px;
+    left: 53px;
+    top: 31px;
+}
+
+.logo {
+    width: 45px;
+    height: 31px;
+    
+    background: #000000;
+    
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.nav-link-div {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0px;
+    
+    width: 240.12px;
+    height: 31px;
+
+    
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 1;  
+}
+
+.nav-link-div a {
+
+    width: 81.03px;
+    height: 18px;
+    
+    font-family: 'Helvetica Neue';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+
+    display: flex;
+    align-items: center;
+    
+    color: #000000;
+    
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
