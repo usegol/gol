@@ -13,7 +13,6 @@ module.exports = {
           'sans-serif', // Fallback to system default sans-serif font
         ],
       },
-      },
     },
   },
   plugins: [],

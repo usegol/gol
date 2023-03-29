@@ -1,6 +1,4 @@
-import { useState } from 'react'
-import { Dialog } from '@headlessui/react'
-import { ChevronRightIcon } from '@heroicons/react/20/solid'
+import React from 'react'
 import NavigationBar from './NavigationBar'
 
 
