@@ -13,6 +13,14 @@ module.exports = {
           'sans-serif', // Fallback to system default sans-serif font
         ],
       },
+      backgroundColor: {
+        primary: '#000000',
+        secondary: '#FFFFFF',
+        hoverPrimary: '#F9FAFB',
+      },
+      textColor: {
+        primary: '#000000',
+      },
     },
   },
   plugins: [],
