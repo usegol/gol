@@ -1,6 +1,25 @@
 import React from 'react'
 import NavigationBar from './NavigationBar'
+import Footer from './footer'
 
+const incentives = [
+  {
+    name: 'Set and personalize  your goals',
+    imageSrc: './assets/flag-icon.svg',
+    description: "Tailoring Objectives to Reflect Your Unique Aspirations and Lifestyle",
+  },
+  {
+    name: 'Track your progress',
+    imageSrc: './assets/progress-icon.svg',
+    description: "Monitor and Evaluate Milestones to Stay Motivated and Agile",
+  },
+  {
+    name: 'View your habit patterns',
+    imageSrc: './assets/habit-patterns-icon.svg',
+    description:
+      "Analyze and Optimize Behavioral Trends for Sustainable Change",
+  },
+]
 
 
 export default function Example() {
@@ -54,8 +73,26 @@ export default function Example() {
         <p class="mt-6 text-lg leading-8 text-gray-600">Sign up now and start your journey towards developing positive habits and achieving your goals with our AI-powered habit tracker.</p>
       </div>
 
+      <div className="mx-auto max-w-7xl py-24 sm:px-2 sm:py-32 lg:px-4">
+        <div className="mx-auto max-w-2xl px-4 lg:max-w-none">
+          <div className="mt-16 grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-3">
+            {incentives.map((incentive) => (
+              <div key={incentive.name} className="sm:flex lg:block">
+                <div className="sm:flex-shrink-0">
+                  <img className="h-16 w-16" src={incentive.imageSrc} alt="" />
+                </div>
+                <div className="mt-4 sm:ml-6 sm:mt-0 lg:ml-0 lg:mt-6">
+                  <h3 className="text-sm font-medium text-gray-900">{incentive.name}</h3>
+                  <p className="mt-2 text-sm text-gray-500">{incentive.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
-
+      <Footer />
     </div>
   )
 }
+
