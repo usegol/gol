@@ -22,12 +22,12 @@ const incentives = [
 ]
 
 
-export default function Example() {
+export default function LandingPage() {
 
   return (
     
     <div className="bg-white">
-      <NavigationBar />
+      <NavigationBar backgroundColor="white" />
       <div class="relative isolate pt-14">
         <svg class="absolute inset-0 -z-10 h-full w-full stroke-gray-200 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]" aria-hidden="true">
           <defs>
@@ -69,8 +69,8 @@ export default function Example() {
         </div>
       </div>
       <div class="mx-auto max-w-2xl text-center">
-        <h2 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">Here’s how it works</h2>
-        <p class="mt-6 text-lg leading-8 text-gray-600">Sign up now and start your journey towards developing positive habits and achieving your goals with our AI-powered habit tracker.</p>
+        <h2 class="text-4xl font-bold tracking-tight text-black-900 sm:text-6xl">Here’s how it works</h2>
+        <p class="mt-6 text-lg leading-8 text-black-600">Sign up now and start your journey towards developing positive habits and achieving your goals with our AI-powered habit tracker.</p>
       </div>
 
       <div className="mx-auto max-w-7xl py-24 sm:px-2 sm:py-32 lg:px-4">
@@ -82,8 +82,8 @@ export default function Example() {
                   <img className="h-16 w-16" src={incentive.imageSrc} alt="" />
                 </div>
                 <div className="mt-4 sm:ml-6 sm:mt-0 lg:ml-0 lg:mt-6">
-                  <h3 className="text-sm font-medium text-gray-900">{incentive.name}</h3>
-                  <p className="mt-2 text-sm text-gray-500">{incentive.description}</p>
+                  <h3 className="text-sm font-medium text-black-900">{incentive.name}</h3>
+                  <p className="mt-2 text-sm text-black-500">{incentive.description}</p>
                 </div>
               </div>
             ))}
