@@ -5,9 +5,7 @@ import NavigationBar from './NavigationBar'
 
 
 const stats = [
-  { label: 'Transactions every 24 hours', value: '44 million' },
   { label: 'The global habit tracking market', value: '$4.1 billion' },
-  { label: 'New users annually', value: '46,000' },
 ]
 
 const team = [
@@ -77,7 +75,7 @@ export default function Example() {
                   We are a team of passionate individuals who believe in the power of positive habits to transform people's lives. Our mission is to provide users with a personalized, intuitive, and effective tool for achieving their goals and developing positive habits.
                   </p>
                 </div>
-                <div className="mt-14 flex justify-end gap-8 sm:-mt-44 sm:justify-start sm:pl-20 lg:mt-0 lg:pl-0">
+                {/* <div className="mt-14 flex justify-end gap-8 sm:-mt-44 sm:justify-start sm:pl-20 lg:mt-0 lg:pl-0">
                   <div className="ml-auto w-44 flex-none space-y-8 pt-32 sm:ml-0 sm:pt-80 lg:order-last lg:pt-36 xl:order-none xl:pt-80">
                     <div className="relative">
                       <img
@@ -124,7 +122,7 @@ export default function Example() {
                       <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

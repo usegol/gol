@@ -52,7 +52,7 @@ export default function LandingPage() {
             </div>
           </div>
           <div class="mt-16 sm:mt-24 lg:mt-0 lg:flex-shrink-0 lg:flex-grow">
-            <svg viewBox="0 0 366 729" role="img" class="mx-auto w-[22.875rem] max-w-full drop-shadow-xl">
+            {/* <svg viewBox="0 0 366 729" role="img" class="mx-auto w-[22.875rem] max-w-full drop-shadow-xl">
               <title>App screenshot</title>
               <defs>
                 <clipPath id="2ade4387-9c63-4fc4-b754-10e687a0d332">
@@ -64,7 +64,7 @@ export default function LandingPage() {
               <foreignObject width="316" height="684" transform="translate(24 24)" clip-path="url(#2ade4387-9c63-4fc4-b754-10e687a0d332)">
                 <img src="https://tailwindui.com/img/component-images/mobile-app-screenshot.png" alt="" />
               </foreignObject>
-            </svg>
+            </svg> */}
           </div>
         </div>
       </div>
