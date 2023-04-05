@@ -1,5 +1,4 @@
 import React from 'react'
-import { useState } from 'react'
 import Footer from './Footer'
 import NavigationBar from './NavigationBar'
 
