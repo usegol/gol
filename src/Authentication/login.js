@@ -47,7 +47,7 @@ export default function Login() {
             {errorMessage && <p className="text-red-500 text-center">{errorMessage}</p>}
             <p className="mt-2 text-center text-sm text-gray-600">
               Or{' '}
-              <a href="#" className="font-medium text-green-600 hover:text-green-500">
+              <a href="/signup" className="font-medium text-green-600 hover:text-green-500">
                 Create a new account
               </a>
             </p>
