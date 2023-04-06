@@ -1,17 +1,6 @@
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
+import Footer from "../Landing Page/Footer";
+
+
 export default function Login() {
     return (
       <>
@@ -162,6 +151,7 @@ export default function Login() {
                   </div>
                 </div>
               </div> */}
+
             </div>
           </div>
         </div>
