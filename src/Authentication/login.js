@@ -1,17 +1,39 @@
-import Footer from "../Landing Page/Footer";
-
+import { useState } from 'react';
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { app } from '../Firebase';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
+  const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState('');
+
+  
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    const email = event.target.email.value;
+    const password = event.target.password.value;
+    const auth = getAuth(app);
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        console.log(user);
+        // Do something with the user object, such as redirect to a dashboard page
+        // nav to dashboard
+        navigate('/dashboard');
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+        // Display error message to user
+        setErrorMessage(errorMessage);
+      });
+  }
+  
     return (
       <>
-        {/*
-          This example requires updating your template:
-  
-          ```
-          <html class="h-full bg-gray-50">
-          <body class="h-full">
-          ```
-        */}
         <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
           <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <a href="/">
@@ -22,6 +44,7 @@ export default function Login() {
                 />
             </a>
             <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">Sign in to your account</h2>
+            {errorMessage && <p className="text-red-500 text-center">{errorMessage}</p>}
             <p className="mt-2 text-center text-sm text-gray-600">
               Or{' '}
               <a href="#" className="font-medium text-green-600 hover:text-green-500">
@@ -32,7 +55,7 @@ export default function Login() {
   
           <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
             <div className="bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10">
-              <form className="space-y-6" action="#" method="POST">
+              <form className="space-y-6" onSubmit={handleSubmit} >
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                     Email address
@@ -87,7 +110,6 @@ export default function Login() {
   
                 <div>
                   <button
-                    type="submit"
                     className="flex w-full justify-center rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
                   >
                     Sign in
