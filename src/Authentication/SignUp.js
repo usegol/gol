@@ -1,8 +1,8 @@
 // make this a set of forms that are all hidden and then show the one that is needed in state
 import React, { useState } from "react";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { useNavigate } from 'react-router-dom';
-import { app } from '../Firebase';
+// import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+// import { useNavigate } from 'react-router-dom';
+// import { app } from '../Firebase';
 
 
 export default function SignUp() {
@@ -28,8 +28,8 @@ export default function SignUp() {
 
 
 function SignUpEmailPassword(props) {
-    const navigate = useNavigate();
-    const [errorMessage, setErrorMessage] = useState('');
+    // const navigate = useNavigate();
+    // const [errorMessage, setErrorMessage] = useState('');
   
     function submitForm() {
         // submit form data to server
@@ -384,9 +384,121 @@ function PhoneVerification(props) {
 }
 
 // this is a form to take in the user's name and motivators
+// function MotivationForm(props) {
+//   const [name, setName] = useState('');
+//   const [motivators, setMotivators] = useState('');
+//   const [errorMessage, setErrorMessage] = useState('');
+
+//   function submitForm() {
+//     // submit form data to server
+//     // navigate to next page
+//     props.onNextStep();
+//   }
+
+//   function handleNameChange(event) {
+//     setName(event.target.value);
+//   }
+
+//   function handleMotivatorsChange(event) {
+//     setMotivators(event.target.value);
+//   }
+
+
+  
+//   function handleSubmit(event) {
+//     event.preventDefault();
+
+//     // Split the motivators string into an array of individual motivators
+//     const motivatorList = motivators.split(',').map((motivator) => motivator.trim());
+
+//     // Validate the input values
+//     if (!name) {
+//       setErrorMessage('Please enter your name.');
+//       return;
+//     }
+
+//     if (!motivators) {
+//       setErrorMessage('Please enter your motivators.');
+//       return;
+//     }
+
+//     if (motivatorList.length < 3) {
+//       setErrorMessage('Please enter at least 3 motivators.');
+//       return;
+//     }
+
+//     // Handle the next step in the form, such as submitting the data to a server
+//     console.log(`Name: ${name}`);
+//     console.log(`Motivators: ${motivatorList.join(', ')}`);
+//     submitForm();
+//   }
+
+//   return (
+//     <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
+//       <div className="sm:mx-auto sm:w-full sm:max-w-md">
+//         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">What motivates you?</h2>
+//       </div>
+
+//       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+//         <div className="bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10">
+//           <form className="space-y-6" onSubmit={handleSubmit}>
+//             <div>
+//               <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
+//                 Name
+//               </label>
+//               <div className="mt-2">
+//                 <input
+//                   id="name"
+//                   name="name"
+//                   type="text"
+//                   autoComplete="off"
+//                   required
+//                   value={name}
+//                   onChange={handleNameChange}
+//                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
+//                 />
+//               </div>
+//             </div>
+
+//             <div>
+//               <label htmlFor="motivators" className="block text-sm font-medium leading-6 text-gray-900">
+//                 Motivators (separated by commas)
+//               </label>
+//               <div className="mt-2">
+//                 <textarea
+//                   id="motivators"
+//                   name="motivators"
+//                   rows="3"
+//                   autoComplete="off"
+//                   required
+//                   value={motivators}
+//                   onChange={handleMotivatorsChange}
+//                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
+//                 ></textarea>
+//               </div>
+//             </div>
+//             {errorMessage && (
+//               <p className="text-red-600">{errorMessage}</p>
+//               )}
+//         <div>
+//           <button
+//             type="submit"
+//             className="flex w-full justify-center rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+//           >
+//             Submit
+//           </button>
+//         </div>
+//       </form>
+//     </div>
+//   </div>
+// </div>
+//   );
+// }
+
 function MotivationForm(props) {
   const [name, setName] = useState('');
-  const [motivators, setMotivators] = useState('');
+  const [motivators, setMotivators] = useState([]);
+  const [currentMotivator, setCurrentMotivator] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
   function submitForm() {
@@ -400,14 +512,24 @@ function MotivationForm(props) {
   }
 
   function handleMotivatorsChange(event) {
-    setMotivators(event.target.value);
+    const value = event.target.value;
+    if (value.endsWith(',')) {
+      const newMotivator = value.slice(0, -1).trim();
+      if (newMotivator) {
+        setMotivators([...motivators, newMotivator]);
+        setCurrentMotivator('');
+      }
+    } else {
+      setCurrentMotivator(value);
+    }
+  }
+
+  function removeMotivator(index) {
+    setMotivators(motivators.filter((_, i) => i !== index));
   }
 
   function handleSubmit(event) {
     event.preventDefault();
-
-    // Split the motivators string into an array of individual motivators
-    const motivatorList = motivators.split(',').map((motivator) => motivator.trim());
 
     // Validate the input values
     if (!name) {
@@ -415,19 +537,14 @@ function MotivationForm(props) {
       return;
     }
 
-    if (!motivators) {
-      setErrorMessage('Please enter your motivators.');
-      return;
-    }
-
-    if (motivatorList.length < 3) {
+    if (motivators.length < 3) {
       setErrorMessage('Please enter at least 3 motivators.');
       return;
     }
 
     // Handle the next step in the form, such as submitting the data to a server
     console.log(`Name: ${name}`);
-    console.log(`Motivators: ${motivatorList.join(', ')}`);
+    console.log(`Motivators: ${motivators.join(', ')}`);
     submitForm();
   }
 
@@ -460,35 +577,46 @@ function MotivationForm(props) {
 
             <div>
               <label htmlFor="motivators" className="block text-sm font-medium leading-6 text-gray-900">
-                Motivators (separated by commas)
+                Motivators (separated by commas, at least 3)
               </label>
               <div className="mt-2">
+                <div className="flex flex-wrap gap-2">
+                  {motivators.map((motivator, index) => (
+                    <span
+                    key={index}
+                    className="bg-green-100 text-green-800 py-1 px-3 rounded-full text-sm cursor-pointer"
+                    onClick={() => removeMotivator(index)}
+                  >
+                    {motivator}
+                  </span>
+                ))}
                 <textarea
                   id="motivators"
                   name="motivators"
-                  rows="3"
+                  rows="1"
                   autoComplete="off"
                   required
-                  value={motivators}
+                  value={currentMotivator}
                   onChange={handleMotivatorsChange}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6 resize-none"
                 ></textarea>
               </div>
             </div>
-            {errorMessage && (
-              <p className="text-red-600">{errorMessage}</p>
-              )}
-        <div>
-          <button
-            type="submit"
-            className="flex w-full justify-center rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
-          >
-            Submit
-          </button>
-        </div>
-      </form>
+          </div>
+          {errorMessage && (
+            <p className="text-red-600">{errorMessage}</p>
+          )}
+          <div>
+            <button
+              type="submit"
+              className="flex w-full justify-center rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
-</div>
-  );
+);
 }
