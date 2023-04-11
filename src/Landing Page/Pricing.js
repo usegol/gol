@@ -45,7 +45,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Example() {
+export default function Pricing() {
   return (
     <div className="bg-white py-24 sm:py-32">
       <NavigationBar backgroundColor="white" />

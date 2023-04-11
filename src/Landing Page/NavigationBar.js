@@ -3,8 +3,8 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog } from '@headlessui/react';
 
 const navigation = [
-  { name: 'Pricing', href: '/Pricing' },
-  { name: 'About Gol', href: '/About' },
+  { name: 'Pricing', href: '/pricing' },
+  { name: 'About Gol', href: '/about' },
 ];
 
 const colorSelector = (color) => {
