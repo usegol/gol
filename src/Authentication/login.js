@@ -1,11 +1,39 @@
 import { useState } from 'react';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import app from '../Firebase';
 import { useNavigate } from 'react-router-dom';
+
 
 export default function Login() {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState('');
+
+  const auth = getAuth();
+  const provider = new GoogleAuthProvider();
+
+  const handleGoogleSignIn = () => {
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          // The signed-in user info.
+          const user = result.user;
+          // IdP data available using getAdditionalUserInfo(result)
+          // Display the user's name and profile picture
+        console.log('Signed in as ' + user.displayName);
+        console.log('Profile picture: ' + user.photoURL);
+          // Redirect to the dashboard page
+          navigate('/dashboard');
+          // ...
+        }).catch((error) => {
+          // Handle Errors here.
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          // The email of the user's account used.
+          const email = error.customData.email;
+          // The AuthCredential type that was used.
+          const credential = GoogleAuthProvider.credentialFromError(error);
+          // ...
+        });
+    };
 
   
 
@@ -117,7 +145,7 @@ export default function Login() {
                 </div>
               </form>
   
-              {/* <div className="mt-6">
+              <div className="mt-6">
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
                     <div className="w-full border-t border-gray-300" />
@@ -127,24 +155,18 @@ export default function Login() {
                   </div>
                 </div>
   
-                <div className="mt-6 grid grid-cols-3 gap-3">
+                <div className="mt-6">
                   <div>
-                    <a
-                      href="#"
-                      className="inline-flex w-full justify-center rounded-md bg-white px-4 py-2 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0"
+                    <button
+                      onClick={handleGoogleSignIn}
+                      className="inline-flex items-center w-full justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
                     >
-                      <span className="sr-only">Sign in with Facebook</span>
-                      <svg className="h-5 w-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M20 10c0-5.523-4.477-10-10-10S0 4.477 0 10c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V10h2.54V7.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V10h2.773l-.443 2.89h-2.33v6.988C16.343 19.128 20 14.991 20 10z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </a>
+                    <span>Sign in with Google</span>
+                    </button>
                   </div>
+                {errorMessage && <p>{errorMessage}</p>}
   
-                  <div>
+                  {/* <div>
                     <a
                       href="#"
                       className="inline-flex w-full justify-center rounded-md bg-white px-4 py-2 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0"
@@ -170,9 +192,9 @@ export default function Login() {
                         />
                       </svg>
                     </a>
-                  </div>
+                  </div> */}
                 </div>
-              </div> */}
+              </div>
 
             </div>
           </div>

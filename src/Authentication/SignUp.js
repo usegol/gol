@@ -1,9 +1,8 @@
 // make this a set of forms that are all hidden and then show the one that is needed in state
 import React, { useState } from "react";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
-import { app, auth, db } from '../Firebase';
-
+import app, { auth, db, analytics } from '../Firebase';
 
 
 export default function SignUp() {
@@ -28,8 +27,35 @@ export default function SignUp() {
 } 
 
 function SignUpEmailPassword(props) {
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState('');
+
+    const handleGoogleSignIn = () => {
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          // The signed-in user info.
+          const user = result.user;
+          // IdP data available using getAdditionalUserInfo(result)
+          // Display the user's name and profile picture
+        console.log('Signed in as ' + user.displayName);
+        console.log('Profile picture: ' + user.photoURL);
+          // Redirect to the dashboard page
+          navigate('/dashboard');
+          // ...
+        }).catch((error) => {
+          // Handle Errors here.
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          // The email of the user's account used.
+          const email = error.customData.email;
+          // The AuthCredential type that was used.
+          const credential = GoogleAuthProvider.credentialFromError(error);
+          // ...
+        });
+    };
 
   function submitForm() {
       // submit form data to server
@@ -119,7 +145,7 @@ function SignUpEmailPassword(props) {
                   </div>
                 </div>
   
-                <div className="flex items-center justify-between">
+                {/* <div className="flex items-center justify-between"> */}
                   {/* <div className="flex items-center">
                     <input
                       id="remember-me"
@@ -137,7 +163,7 @@ function SignUpEmailPassword(props) {
                       Forgot your password?
                     </a>
                   </div> */}
-                </div>
+                {/* </div> */}
   
                 <div>
                   <button
@@ -147,7 +173,32 @@ function SignUpEmailPassword(props) {
                   </button>
                 </div>
               </form>
+
+              <div className="mt-6">
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-gray-300" />
+                  </div>
+                  <div className="relative flex justify-center text-sm">
+                    <span className="bg-white px-2 text-gray-500">Or continue with</span>
+                  </div>
+                </div>
   
+                <div className="mt-6">
+                  <div>
+                    <button
+                      onClick={handleGoogleSignIn}
+                      className="inline-flex items-center w-full justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                    >
+                    <span>Sign up with Google</span>
+                    </button>
+                  </div>
+                {errorMessage && <p>{errorMessage}</p>}
+                </div>
+              </div>
+              
+              
+
               {/* <div className="mt-6">
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
