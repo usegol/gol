@@ -7,6 +7,7 @@ import SignUp from './Authentication/SignUp';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Dashboard from './Dashboard/Dashboard';
 import Login from './Authentication/login';
+import ForgotPasword from './Authentication/ForgotPasword';
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/test" element={<Login />} />          
+          <Route path="/auth/forgot-password" element={<ForgotPasword />} />
           <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </Router>
