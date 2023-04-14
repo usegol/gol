@@ -1,35 +1,119 @@
-import React from 'react';
-import { auth } from '../Firebase';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { auth, db } from '../Firebase';
+import { useNavigate, Link } from 'react-router-dom';
+import CreateGoal from './CreateGoal';
 
-// Dashboard component is displayed when a user is logged in
 export default function Dashboard() {
-  // Declare state variables and hooks
   const navigate = useNavigate();
-  const [user, setUser] = React.useState(null);
+  const [user, setUser] = useState(null);
+  const [goals, setGoals] = useState([]);
 
-  // React useEffect hook to handle user authentication state changes
-  React.useEffect(() => {
-    // Add a listener for authentication state changes
-    auth.onAuthStateChanged((user) => {
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        // If user is logged in, set the user state
         setUser(user);
+        fetchGoals(user.uid);
       } else {
-        // If user is not logged in, navigate to '/test' route
         navigate('/test');
       }
     });
-  }, [navigate]); // Dependency array with navigate
 
-  // Render the dashboard component
+    return () => {
+      unsubscribe();
+    };
+  }, [navigate]);
+
+  const fetchGoals = async (userId) => {
+    try {
+      const goalsSnapshot = await db
+        .collection('goals')
+        .where('userId', '==', userId)
+        .get();
+  
+      if (goalsSnapshot.empty) {
+        console.log('No goals found.');
+        return;
+      }
+  
+      const goalsData = goalsSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setGoals(goalsData);
+      console.log('Fetched goals: ', goalsData);
+    } catch (error) {
+      console.error('Error fetching goals: ', error);
+    }
+  };
+  
+
   return (
     <div>
       <h1>Dashboard</h1>
-      {/* Display the user's email if logged in, otherwise display 'No user' */}
       <p>{user ? user.email : 'No user'}</p>
-      {/* Add a button to sign out the user */}
       <button onClick={() => auth.signOut()}>Sign Out</button>
+      <div>
+        <h2>Active Goals</h2>
+        {goals.map((goal) => (
+          <div key={goal.id}>
+            <h3>
+              <Link to={`/goal/${goal.id}`}>{goal.title}</Link>
+            </h3>
+            {/* Replace '50' with the actual completion percentage */}
+            <p>Completion: 50%</p>
+            {/* Replace '10' with the actual days remaining */}
+            <p>Days remaining: 10</p>
+          </div>
+        ))}
+      </div>
+      <div>
+        <h2>Create a New Goal</h2>
+        <Link to="/create-goal">Create Goal</Link>
+
+      </div>
+      {/* Add the other dashboard components (e.g., graphs, charts, social features, etc.) here */}
     </div>
   );
 }
+
+
+// import React, { useState, useEffect } from 'react';
+// import { db } from '../Firebase';
+// import { collection, query, where, onSnapshot } from 'firebase/firestore';
+// import { Link } from 'react-router-dom';
+
+// export default function Dashboard({ user }) {
+//   const [goals, setGoals] = useState([]);
+
+//   useEffect(() => {
+//     if (user) {
+//       const q = query(collection(db, 'goals'), where('userId', '==', user.uid));
+//       const unsubscribe = onSnapshot(q, (querySnapshot) => {
+//         const goalsData = [];
+//         querySnapshot.forEach((doc) => {
+//           goalsData.push({ id: doc.id, ...doc.data() });
+//         });
+//         setGoals(goalsData);
+//       });
+
+//       return () => unsubscribe();
+//     }
+//   }, [user]);
+
+//   return (
+//     <div>
+//       <h2>Welcome, {user.displayName}</h2>
+//       <div>
+//         <h3>Active Goals</h3>
+//         <ul>
+//           {goals.map((goal) => (
+//             <li key={goal.id}>
+//               <Link to={`/goal/${goal.id}`}>{goal.title}</Link>
+//             </li>
+//           ))}
+//         </ul>
+//       </div>
+//       <Link to="/create-goal">Create New Goal</Link>
+//     </div>
+//   );
+// }

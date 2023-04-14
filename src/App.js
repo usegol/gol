@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Dashboard from './Dashboard/Dashboard';
 import Login from './Authentication/login';
 import ForgotPasword from './Authentication/ForgotPasword';
+import CreateGoal from './Dashboard/CreateGoal';
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="/test" element={<Login />} />          
           <Route path="/auth/forgot-password" element={<ForgotPasword />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="create-goal" element={<CreateGoal />} />
         </Routes>
       </Router>
     </div>
