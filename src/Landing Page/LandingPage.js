@@ -1,6 +1,6 @@
 import React from 'react'
 import NavigationBar from './NavigationBar'
-import Footer from './Footer'
+import Footer from './footer'
 
 const incentives = [
   {

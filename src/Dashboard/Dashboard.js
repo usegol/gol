@@ -63,6 +63,7 @@ export default function Dashboard() {
                   <li
                     key={goal.id}
                     className="p-3 bg-gray-100 border border-gray-200 rounded"
+                    onClick={() => navigate(`/goal/${goal.id}`)}
                   >
                     <Link
                       to={`/goal/${goal.id}`}
