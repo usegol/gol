@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { auth, db } from '../Firebase';
 import { useNavigate, Link } from 'react-router-dom';
-import CreateGoal from './CreateGoal';
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -23,97 +23,73 @@ export default function Dashboard() {
     };
   }, [navigate]);
 
-  const fetchGoals = async (userId) => {
-    try {
-      const goalsSnapshot = await db
-        .collection('goals')
-        .where('userId', '==', userId)
-        .get();
-  
-      if (goalsSnapshot.empty) {
-        console.log('No goals found.');
-        return;
-      }
-  
-      const goalsData = goalsSnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+  const fetchGoals = (userId) => {
+    const q = query(collection(db, 'goals'), where('userId', '==', userId));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const goalsData = [];
+      querySnapshot.forEach((doc) => {
+        goalsData.push({ id: doc.id, ...doc.data() });
+      });
       setGoals(goalsData);
-      console.log('Fetched goals: ', goalsData);
-    } catch (error) {
-      console.error('Error fetching goals: ', error);
-    }
+    });
+
+    return () => unsubscribe();
   };
-  
 
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <p>{user ? user.email : 'No user'}</p>
-      <button onClick={() => auth.signOut()}>Sign Out</button>
-      <div>
-        <h2>Active Goals</h2>
-        {goals.map((goal) => (
-          <div key={goal.id}>
-            <h3>
-              <Link to={`/goal/${goal.id}`}>{goal.title}</Link>
-            </h3>
-            {/* Replace '50' with the actual completion percentage */}
-            <p>Completion: 50%</p>
-            {/* Replace '10' with the actual days remaining */}
-            <p>Days remaining: 10</p>
+    <div className="min-h-screen bg-gray-100 font-inter">
+      <header className="bg-white border-b border-gray-200 p-4">
+        <div className="container mx-auto flex justify-between items-center">
+          <img src='./assets/logo.png' alt="Logo" className="h-8" />
+          <button
+            onClick={() => auth.signOut()}
+            className="bg-black text-white px-4 py-2 rounded"
+          >
+            Sign Out
+          </button>
+        </div>
+      </header>
+      <main className="container mx-auto mt-10 p-4">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-semibold">Welcome to Gol</h2>
+          <p className="text-gray-600">Track your goals and habits, and achieve success.</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="col-span-1 md:col-span-2">
+            <div className="bg-white p-6 rounded shadow">
+              <h3 className="text-lg font-semibold mb-4">Active Goals</h3>
+              <ul className="space-y-2">
+                {goals.map((goal) => (
+                  <li
+                    key={goal.id}
+                    className="p-3 bg-gray-100 border border-gray-200 rounded"
+                  >
+                    <Link
+                      to={`/goal/${goal.id}`}
+                      className="text-black font-semibold hover:underline"
+                    >
+                      {goal.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-        ))}
-      </div>
-      <div>
-        <h2>Create a New Goal</h2>
-        <Link to="/create-goal">Create Goal</Link>
-
-      </div>
-      {/* Add the other dashboard components (e.g., graphs, charts, social features, etc.) here */}
-    </div>
+          <div className="col-span-1">
+            <div className="bg-white p-6 rounded shadow">
+              <h3 className="text-lg font-semibold mb-4">Create New Goal</h3>
+              <Link
+                to="/create-goal"
+                className="bg-black text-white px-4 py-2 rounded"
+              >
+                Create Goal
+              </Link>
+            </div>
+          </div>
+          {/* Additional components such as graphs, charts, and social features can be added here */}
+        </div>
+        </main>
+        </div>
   );
 }
 
-
-// import React, { useState, useEffect } from 'react';
-// import { db } from '../Firebase';
-// import { collection, query, where, onSnapshot } from 'firebase/firestore';
-// import { Link } from 'react-router-dom';
-
-// export default function Dashboard({ user }) {
-//   const [goals, setGoals] = useState([]);
-
-//   useEffect(() => {
-//     if (user) {
-//       const q = query(collection(db, 'goals'), where('userId', '==', user.uid));
-//       const unsubscribe = onSnapshot(q, (querySnapshot) => {
-//         const goalsData = [];
-//         querySnapshot.forEach((doc) => {
-//           goalsData.push({ id: doc.id, ...doc.data() });
-//         });
-//         setGoals(goalsData);
-//       });
-
-//       return () => unsubscribe();
-//     }
-//   }, [user]);
-
-//   return (
-//     <div>
-//       <h2>Welcome, {user.displayName}</h2>
-//       <div>
-//         <h3>Active Goals</h3>
-//         <ul>
-//           {goals.map((goal) => (
-//             <li key={goal.id}>
-//               <Link to={`/goal/${goal.id}`}>{goal.title}</Link>
-//             </li>
-//           ))}
-//         </ul>
-//       </div>
-//       <Link to="/create-goal">Create New Goal</Link>
-//     </div>
-//   );
-// }
