@@ -180,7 +180,6 @@ function MotivationForm(props) {
 
   async function addToFirestore(name, motivators) {
     try {
-      console.log('Attempting to save data to Firestore:', { name, motivators });
       await addDoc(collection(db, 'motivationForms'), {
         name,
         motivators,
@@ -190,7 +189,8 @@ function MotivationForm(props) {
     } catch (error) {
       console.error('Error saving form data to Firestore: ', error);
     }
-  }  
+  }
+  
 
   async function submitForm() {
     await addToFirestore(name, motivators);

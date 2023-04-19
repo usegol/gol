@@ -36,6 +36,11 @@ export default function Dashboard() {
     return () => unsubscribe();
   };
 
+
+  if (!user) {
+    navigate('/login');
+  }
+  else {
   return (
     <div className="min-h-screen bg-gray-100 font-inter">
       <header className="bg-white border-b border-gray-200 p-4">
@@ -93,4 +98,4 @@ export default function Dashboard() {
         </div>
   );
 }
-
+}
