@@ -34,28 +34,28 @@ export default function Dashboard() {
 
   const fetchGoals = (userId) => {
     const q = query(collection(db, 'goals'), where('userId', '==', userId));
-  
+
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const activeGoalsData = [];
       const completedGoalsData = [];
-  
+
       querySnapshot.forEach((doc) => {
         const goalData = { id: doc.id, ...doc.data() };
-  
+
         if (goalData.completed) {
           completedGoalsData.push(goalData);
         } else {
           activeGoalsData.push(goalData);
         }
       });
-  
+
       setGoals(activeGoalsData);
       setCompletedGoals(completedGoalsData);
     });
-  
+
     return () => unsubscribe();
   };
-  
+
   const markGoalAsCompleted = async (goalId) => {
     await updateDoc(doc(db, 'goals', goalId), {
       completed: true,
@@ -132,22 +132,22 @@ export default function Dashboard() {
                   </ul>
                 </div>
               </div>
-              <div className="col-span-1">
-                <div className="bg-white p-6 rounded shadow">
-                  <h3 className="text-lg font-semibold mb-4">Create New Goal</h3>
-                  <Link
-                    to="/create-goal"
-                    className="bg-black text-white px-4 py-2 rounded"
-                  >
-                    Create Goal
-                  </Link>
-                </div>
-              </div>
               {/* Additional components such as graphs, charts, and social features can be added here */}
             </div>
           </main>
+          <Link
+            to="/create-goal"
+            className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-black text-white flex items-center justify-center hover:bg-green-500"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+
+          </Link>
+
+
+
         </div>
       );
     }
   }
-
