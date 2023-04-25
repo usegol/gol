@@ -8,6 +8,10 @@ export default function Dashboard() {
   const [user, setUser] = useState(null);
   const [goals, setGoals] = useState([]);
 
+  const navigateToJournal = (goalId) => {
+    navigate(`/journal/${goalId}`);
+  };
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
@@ -60,16 +64,18 @@ export default function Dashboard() {
               <h3 className="text-lg font-semibold mb-4">Active Goals</h3>
               <ul className="space-y-2">
                 {goals.map((goal) => (
-                  <li
-                    key={goal.id}
-                    className="p-3 bg-gray-100 border border-gray-200 rounded"
-                  >
-                    <Link
-                      to={`/goal/${goal.id}`}
-                      className="text-black font-semibold hover:underline"
-                    >
-                      {goal.title}
-                    </Link>
+                  <li key={goal.id} className="p-3 bg-gray-100 border border-gray-200 rounded">
+                    <div className="flex justify-between items-center">
+                      <Link
+                        to={`/goal/${goal.id}`}
+                        className="text-black font-semibold hover:underline"
+                      >
+                        {goal.title}
+                      </Link>
+                      <button onClick={() => navigateToJournal(goal.id)} className="bg-black text-white px-4 py-2 rounded">
+                        Journal
+                      </button>
+                    </div>
                   </li>
                 ))}
               </ul>
@@ -81,15 +87,14 @@ export default function Dashboard() {
               <Link
                 to="/create-goal"
                 className="bg-black text-white px-4 py-2 rounded"
-              >
+                >
                 Create Goal
-              </Link>
+                </Link>
             </div>
-          </div>
-          {/* Additional components such as graphs, charts, and social features can be added here */}
-        </div>
-        </main>
-        </div>
-  );
-}
-
+                </div>
+                {/* Additional components such as graphs, charts, and social features can be added here */}
+                </div>
+                </main>
+                </div>
+                );
+                }
