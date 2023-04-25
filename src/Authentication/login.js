@@ -10,33 +10,27 @@ export default function Login() {
 
   const auth = getAuth();
   const provider = new GoogleAuthProvider();
-
+  
   const handleGoogleSignIn = () => {
-      signInWithPopup(auth, provider)
-        .then((result) => {
-          // The signed-in user info.
-          const user = result.user;
-          // IdP data available using getAdditionalUserInfo(result)
-          // Display the user's name and profile picture
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // The signed-in user info.
+        const user = result.user;
+        // IdP data available using getAdditionalUserInfo(result)
+        // Display the user's name and profile picture
         console.log('Signed in as ' + user.displayName);
         console.log('Profile picture: ' + user.photoURL);
-          // Redirect to the dashboard page
-          navigate('/dashboard');
-          // ...
-        }).catch((error) => {
-          // Handle Errors here.
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          // The email of the user's account used.
-          const email = error.customData.email;
-          // The AuthCredential type that was used.
-          const credential = GoogleAuthProvider.credentialFromError(error);
-          // ...
-        });
-    };
-
+        // Redirect to the dashboard page
+        navigate('/dashboard');
+        // ...
+      })
+      .catch((error) => {
+        // Handle Google sign-in errors.
+        const errorMessage = 'Failed to sign in with Google. Please try again later.';
+        setErrorMessage(errorMessage);
+      });
+  };
   
-
   function handleSubmit(event) {
     event.preventDefault();
     const email = event.target.email.value;
@@ -44,21 +38,26 @@ export default function Login() {
     const auth = getAuth(app);
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in
+        // Signed in successfully.
         const user = userCredential.user;
         console.log(user);
-        // Do something with the user object, such as redirect to a dashboard page
-        // nav to dashboard
+        // Redirect to the dashboard page.
         navigate('/dashboard');
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-        // Display error message to user
+        // Handle authentication errors.
+        let errorMessage = '';
+        if (error.code === 'auth/user-not-found') {
+          errorMessage = 'Invalid email address.';
+        } else if (error.code === 'auth/wrong-password') {
+          errorMessage = 'Invalid password.';
+        } else {
+          errorMessage = 'Failed to sign in. Please try again later.';
+        }
         setErrorMessage(errorMessage);
       });
   }
+  
   
     return (
       <>
@@ -163,9 +162,7 @@ export default function Login() {
                     >
                     <span>Sign in with Google</span>
                     </button>
-                  </div>
-                {errorMessage && <p>{errorMessage}</p>}
-  
+                  </div>  
                   {/* <div>
                     <a
                       href="#"

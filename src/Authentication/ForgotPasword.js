@@ -15,6 +15,8 @@ export default function ForgotPassword() {
       })
       .catch((error) => {
         alert('Password reset email sent!')
+        const errorMessage = error.message;
+        setErrorMessage(errorMessage);
       });
   };
 
