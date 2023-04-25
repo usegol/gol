@@ -8,6 +8,7 @@ export default function Dashboard() {
   const [user, setUser] = useState(null);
   const [goals, setGoals] = useState([]);
   const [completedGoals, setCompletedGoals] = useState([]);
+  const [showCompletedGoals, setShowCompletedGoals] = useState(false);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -63,6 +64,10 @@ export default function Dashboard() {
     });
   };
 
+  const toggleCompletedGoals = () => {
+    setShowCompletedGoals(!showCompletedGoals);
+  };
+
   if (!user) {
     navigate('/login');
   } else {
@@ -91,63 +96,69 @@ export default function Dashboard() {
                 <ul className="space-y-2">
                   {goals.map((goal) => (
                     <li
+                    key={goal.id}
+                    className="p-3 bg-gray-100 border border-gray-200 rounded flex justify-between items-center"
+                  >
+                    <Link
+                      to={`/goal/${goal.id}`}
+                      className="text-black font-semibold hover:underline"
+                    >
+                      {goal.title}
+                    </Link>
+                    <button
+                      onClick={() => markGoalAsCompleted(goal.id)}
+                      className="bg-green-500 text-white px-2 py-1 rounded"
+                    >
+                      Mark as Completed
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div className="col-span-1 md:col-span-2 mb-4">
+            <button
+              onClick={toggleCompletedGoals}
+              className="bg-black text-white px-4 py-2 rounded"
+            >
+              {showCompletedGoals ? "Hide" : "View Completed Goals"}
+            </button>
+          </div>
+          {showCompletedGoals && (
+            <div className="col-span-1 md:col-span-2">
+              <div className="bg-white p-6 rounded shadow">
+                <h3 className="text-lg font-semibold mb-4">Completed Goals</h3>
+                <ul className="space-y-2">
+                  {completedGoals.map((goal) => (
+                    <li
                       key={goal.id}
-                      className="p-3 bg-gray-100 border border-gray-200 rounded flex justify-between items-center"
+                      className="p-3 bg-gray-100 border border-gray-200 rounded"
+                      onClick={() => navigate(`/goal/${goal.id}`)}
                     >
                       <Link
                         to={`/goal/${goal.id}`}
                         className="text-black font-semibold hover:underline"
-                        >
-                          {goal.title}
-                        </Link>
-                        <button
-                          onClick={() => markGoalAsCompleted(goal.id)}
-                          className="bg-green-500 text-white px-2 py-1 rounded"
-                        >
-                          Mark as Completed
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-              <div className="col-span-1 md:col-span-2">
-                <div className="bg-white p-6 rounded shadow">
-                  <h3 className="text-lg font-semibold mb-4">Completed Goals</h3>
-                  <ul className="space-y-2">
-                    {completedGoals.map((goal) => (
-                      <li
-                        key={goal.id}
-                        className="p-3 bg-gray-100 border border-gray-200 rounded"
-                        onClick={() => navigate(`/goal/${goal.id}`)}
                       >
-                        <Link
-                          to={`/goal/${goal.id}`}
-                          className="text-black font-semibold hover:underline"
-                        >
-                          {goal.title}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                        {goal.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              {/* Additional components such as graphs, charts, and social features can be added here */}
             </div>
-          </main>
-          <Link
-            to="/create-goal"
-            className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-black text-white flex items-center justify-center hover:bg-green-500"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-
-          </Link>
-
-
-
+          )}
         </div>
-      );
-    }
-  }
+      </main>
+      <Link
+        to="/create-goal"
+        className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-black text-white flex items-center justify-center hover:bg-green-500"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+        </svg>
+      </Link>
+    </div>
+  );
+}
+}
+
