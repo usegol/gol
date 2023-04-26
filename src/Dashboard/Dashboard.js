@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { auth, db } from '../Firebase';
 import { useNavigate, Link } from 'react-router-dom';
 import { collection, query, where, onSnapshot, updateDoc, doc } from 'firebase/firestore';
+import { fetchMotivationalQuote } from '../OpenAI';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -9,8 +10,18 @@ export default function Dashboard() {
   const [goals, setGoals] = useState([]);
   const [completedGoals, setCompletedGoals] = useState([]);
   const [showCompletedGoals, setShowCompletedGoals] = useState(false);
+  const [quote, setQuote] = useState('');
 
   useEffect(() => {
+    // Fetch the motivational quote
+    (async () => {
+      const fetchedQuote = await fetchMotivationalQuote();
+      setQuote(fetchedQuote);
+    })();
+
+
+
+
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         setUser(user);
@@ -85,10 +96,11 @@ export default function Dashboard() {
           </div>
         </header>
         <main className="container mx-auto mt-10 p-4">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-semibold">Welcome to Gol</h2>
-            <p className="text-gray-600">Track your goals and habits, and achieve success.</p>
-          </div>
+        <div className="text-center mb-8">
+        <h2 className="text-2xl font-semibold">Welcome to Gol</h2>
+        <p className="text-gray-600">Track your goals and habits, and achieve success.</p>
+        <p className="text-gray-500 italic mt-4">{quote}</p> {/* Render the quote here */}
+      </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="col-span-1 md:col-span-2">
               <div className="bg-white p-6 rounded shadow">
