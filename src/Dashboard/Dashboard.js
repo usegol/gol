@@ -10,14 +10,14 @@ export default function Dashboard() {
   const [goals, setGoals] = useState([]);
   const [completedGoals, setCompletedGoals] = useState([]);
   const [showCompletedGoals, setShowCompletedGoals] = useState(false);
-  const [quote, setQuote] = useState('');
+  // const [quote, setQuote] = useState('');
 
   useEffect(() => {
     // Fetch the motivational quote
-    (async () => {
-      const fetchedQuote = await fetchMotivationalQuote();
-      setQuote(fetchedQuote);
-    })();
+    // (async () => {
+    //   const fetchedQuote = await fetchMotivationalQuote();
+    //   setQuote(fetchedQuote);
+    // })();
 
 
 
@@ -99,7 +99,7 @@ export default function Dashboard() {
         <div className="text-center mb-8">
         <h2 className="text-2xl font-semibold">Welcome to Gol</h2>
         <p className="text-gray-600">Track your goals and habits, and achieve success.</p>
-        <p className="text-gray-500 italic mt-4">{quote}</p> {/* Render the quote here */}
+        {/* <p className="text-gray-500 italic mt-4">{quote}</p> Render the quote here */}
       </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="col-span-1 md:col-span-2">
