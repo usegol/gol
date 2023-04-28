@@ -109,11 +109,12 @@ export default function Dashboard() {
                   {goals.map((goal) => (
                     <li
                     key={goal.id}
+                    onClick={() => navigate(`/goal/${goal.id}`)}
                     className="p-3 bg-gray-100 border border-gray-200 rounded flex justify-between items-center"
                   >
                     <Link
                       to={`/goal/${goal.id}`}
-                      className="text-black font-semibold hover:underline"
+                      className="text-black font-semibold"
                     >
                       {goal.title}
                     </Link>
