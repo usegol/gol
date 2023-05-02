@@ -115,7 +115,7 @@ export default function Dashboard() {
                   </div>
                   <button
                     onClick={resetFilter}
-                    className="ml-4 w-6 h-6 bg-black text-white flex items-center justify-center rounded-full"
+                    className="ml-4 w-6 h-6 bg-gray-200 text-white flex items-center justify-center rounded-full hover:bg-gray-950"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
