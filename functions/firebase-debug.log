@@ -1,0 +1,132 @@
+[debug] [2023-05-02T22:10:21.570Z] ----------------------------------------------------------------------
+[debug] [2023-05-02T22:10:21.571Z] Command:       /Users/elvinatwine/.nvm/versions/node/v16.19.0/bin/node /Users/elvinatwine/.nvm/versions/node/v16.19.0/bin/firebase functions:shell
+[debug] [2023-05-02T22:10:21.571Z] CLI Version:   11.29.1
+[debug] [2023-05-02T22:10:21.571Z] Platform:      darwin
+[debug] [2023-05-02T22:10:21.571Z] Node Version:  v16.19.0
+[debug] [2023-05-02T22:10:21.573Z] Time:          Tue May 02 2023 15:10:21 GMT-0700 (Pacific Daylight Time)
+[debug] [2023-05-02T22:10:21.573Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-05-02T22:10:21.574Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2023-05-02T22:10:21.618Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-05-02T22:10:21.618Z] > authorizing via signed-in user (elivnatwiine@gmail.com)
+[debug] [2023-05-02T22:10:21.618Z] [iam] checking project use-gol for permissions ["firebase.projects.get"]
+[debug] [2023-05-02T22:10:21.618Z] > refreshing access token with scopes: []
+[debug] [2023-05-02T22:10:21.619Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2023-05-02T22:10:21.619Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-05-02T22:10:21.802Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2023-05-02T22:10:21.803Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-05-02T22:10:21.849Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/use-gol:testIamPermissions [none]
+[debug] [2023-05-02T22:10:21.849Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/use-gol:testIamPermissions x-goog-quota-user=projects/use-gol
+[debug] [2023-05-02T22:10:21.849Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/use-gol:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2023-05-02T22:10:21.852Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2023-05-02T22:10:21.852Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2023-05-02T22:10:22.117Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/use-gol:testIamPermissions 200
+[debug] [2023-05-02T22:10:22.117Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/use-gol:testIamPermissions {"permissions":["firebase.projects.get"]}
+[warn] ⚠  functions: Functions Emulator unable to start on port 5000, starting on 5001 instead. {"metadata":{"emulator":{"name":"functions"},"message":"Functions Emulator unable to start on port 5000, starting on 5001 instead."}}
+[debug] [2023-05-02T22:10:22.278Z] [functions] Functions Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-05-02T22:10:22.280Z] defaultcredentials: writing to file /Users/elvinatwine/.config/firebase/elivnatwiine_gmail_com_application_default_credentials.json
+[debug] [2023-05-02T22:10:22.281Z] DEBUG: Setting GAC to /Users/elvinatwine/.config/firebase/elivnatwiine_gmail_com_application_default_credentials.json
+[debug] [2023-05-02T22:10:22.281Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/use-gol/adminSdkConfig [none]
+[debug] [2023-05-02T22:10:22.612Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/use-gol/adminSdkConfig 200
+[debug] [2023-05-02T22:10:22.612Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/use-gol/adminSdkConfig {"projectId":"use-gol","storageBucket":"use-gol.appspot.com"}
+[debug] [2023-05-02T22:10:22.643Z] [functions] Watching "/Users/elvinatwine/Desktop/gol/functions" for Cloud Functions...
+[debug] [2023-05-02T22:10:22.649Z] Validating nodejs source
+[debug] [2023-05-02T22:10:23.000Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "16"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^11.5.0",
+    "firebase-functions": "^4.2.0"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^3.0.0"
+  },
+  "private": true
+}
+[debug] [2023-05-02T22:10:23.000Z] Building nodejs source
+[debug] [2023-05-02T22:10:23.000Z] Failed to find version of module node: reached end of search path /Users/elvinatwine/Desktop/gol/functions/node_modules
+[info] ✔  functions: Using node@16 from host. 
+[debug] [2023-05-02T22:10:23.002Z] Could not find functions.yaml. Must use http discovery
+[debug] [2023-05-02T22:10:23.006Z] Found firebase-functions binary at '/Users/elvinatwine/Desktop/gol/node_modules/.bin/firebase-functions'
+[debug] [2023-05-02T22:10:23.124Z] Serving at port 8839
+
+[debug] [2023-05-02T22:10:23.325Z] Got response from /__/functions.yaml {"endpoints":{"deleteOldCompletedGoals":{"platform":"gcfv1","availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"serviceAccountEmail":null,"vpc":null,"scheduleTrigger":{"schedule":"every 24 hours","retryConfig":{"retryCount":null,"maxDoublings":null,"maxRetryDuration":null,"maxBackoffDuration":null,"minBackoffDuration":null},"timeZone":null},"labels":{},"entryPoint":"deleteOldCompletedGoals"}},"specVersion":"v1alpha1","requiredAPIs":[{"api":"cloudscheduler.googleapis.com","reason":"Needed for scheduled functions."}]}
+[debug] [2023-05-02T22:10:23.329Z] shutdown requested via /__/quitquitquit
+
+[debug] [2023-05-02T22:10:23.334Z] [functions] Loaded functions definitions from source: deleteOldCompletedGoals.
+[debug] [2023-05-02T22:10:23.334Z] [functions[us-central1-deleteOldCompletedGoals]] function ignored because the pubsub emulator does not exist or is not running.
+[info] i  functions: Loaded functions: deleteOldCompletedGoals 
+[warn] ⚠  functions: The following emulators are not running, calls to these services will affect production: firestore, database, pubsub, storage, eventarc 
+[debug] [2023-05-02T22:10:34.615Z] ----------------------------------------------------------------------
+[debug] [2023-05-02T22:10:34.616Z] Command:       /Users/elvinatwine/.nvm/versions/node/v16.19.0/bin/node /Users/elvinatwine/.nvm/versions/node/v16.19.0/bin/firebase functions:shell
+[debug] [2023-05-02T22:10:34.616Z] CLI Version:   11.29.1
+[debug] [2023-05-02T22:10:34.616Z] Platform:      darwin
+[debug] [2023-05-02T22:10:34.616Z] Node Version:  v16.19.0
+[debug] [2023-05-02T22:10:34.617Z] Time:          Tue May 02 2023 15:10:34 GMT-0700 (Pacific Daylight Time)
+[debug] [2023-05-02T22:10:34.617Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-05-02T22:10:34.650Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-05-02T22:10:34.650Z] > authorizing via signed-in user (elivnatwiine@gmail.com)
+[debug] [2023-05-02T22:10:34.650Z] [iam] checking project use-gol for permissions ["firebase.projects.get"]
+[debug] [2023-05-02T22:10:34.651Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/use-gol:testIamPermissions [none]
+[debug] [2023-05-02T22:10:34.651Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/use-gol:testIamPermissions x-goog-quota-user=projects/use-gol
+[debug] [2023-05-02T22:10:34.651Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/use-gol:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2023-05-02T22:10:34.812Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/use-gol:testIamPermissions 200
+[debug] [2023-05-02T22:10:34.812Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/use-gol:testIamPermissions {"permissions":["firebase.projects.get"]}
+[warn] ⚠  functions: Functions Emulator unable to start on port 5000, starting on 5001 instead. {"metadata":{"emulator":{"name":"functions"},"message":"Functions Emulator unable to start on port 5000, starting on 5001 instead."}}
+[debug] [2023-05-02T22:10:34.948Z] [functions] Functions Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-05-02T22:10:34.950Z] defaultcredentials: writing to file /Users/elvinatwine/.config/firebase/elivnatwiine_gmail_com_application_default_credentials.json
+[debug] [2023-05-02T22:10:34.950Z] DEBUG: Setting GAC to /Users/elvinatwine/.config/firebase/elivnatwiine_gmail_com_application_default_credentials.json
+[debug] [2023-05-02T22:10:34.951Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/use-gol/adminSdkConfig [none]
+[debug] [2023-05-02T22:10:35.212Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/use-gol/adminSdkConfig 200
+[debug] [2023-05-02T22:10:35.212Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/use-gol/adminSdkConfig {"projectId":"use-gol","storageBucket":"use-gol.appspot.com"}
+[debug] [2023-05-02T22:10:35.246Z] [functions] Watching "/Users/elvinatwine/Desktop/gol/functions" for Cloud Functions...
+[debug] [2023-05-02T22:10:35.252Z] Validating nodejs source
+[debug] [2023-05-02T22:10:35.582Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "16"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^11.5.0",
+    "firebase-functions": "^4.2.0"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^3.0.0"
+  },
+  "private": true
+}
+[debug] [2023-05-02T22:10:35.582Z] Building nodejs source
+[debug] [2023-05-02T22:10:35.583Z] Failed to find version of module node: reached end of search path /Users/elvinatwine/Desktop/gol/functions/node_modules
+[info] ✔  functions: Using node@16 from host. 
+[debug] [2023-05-02T22:10:35.584Z] Could not find functions.yaml. Must use http discovery
+[debug] [2023-05-02T22:10:35.589Z] Found firebase-functions binary at '/Users/elvinatwine/Desktop/gol/node_modules/.bin/firebase-functions'
+[debug] [2023-05-02T22:10:35.686Z] Serving at port 8462
+
+[debug] [2023-05-02T22:10:35.805Z] Got response from /__/functions.yaml {"endpoints":{"deleteOldCompletedGoals":{"platform":"gcfv1","availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"serviceAccountEmail":null,"vpc":null,"scheduleTrigger":{"schedule":"every 24 hours","retryConfig":{"retryCount":null,"maxDoublings":null,"maxRetryDuration":null,"maxBackoffDuration":null,"minBackoffDuration":null},"timeZone":null},"labels":{},"entryPoint":"deleteOldCompletedGoals"}},"specVersion":"v1alpha1","requiredAPIs":[{"api":"cloudscheduler.googleapis.com","reason":"Needed for scheduled functions."}]}
+[debug] [2023-05-02T22:10:35.809Z] shutdown requested via /__/quitquitquit
+
+[debug] [2023-05-02T22:10:35.812Z] [functions] Loaded functions definitions from source: deleteOldCompletedGoals.
+[debug] [2023-05-02T22:10:35.813Z] [functions[us-central1-deleteOldCompletedGoals]] function ignored because the pubsub emulator does not exist or is not running.
+[info] i  functions: Loaded functions: deleteOldCompletedGoals 
+[warn] ⚠  functions: The following emulators are not running, calls to these services will affect production: firestore, database, pubsub, storage, eventarc 

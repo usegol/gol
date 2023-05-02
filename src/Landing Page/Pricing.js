@@ -7,7 +7,7 @@ const tiers = [
     name: 'Basic',
     id: 'tier-basic',
     href: '#',
-    priceMonthly: '$4.99',
+    priceMonthly: 'Free',
     description: 'Set and track goals, receive personalized feedback, and enjoy insights, and reminders',
     features: ['up to 3 goals', 'Habit Tracking', 'Journaling and Personalized Feedback', 'Insigtful Analytics'],
     mostPopular: false,
