@@ -141,10 +141,13 @@ export default function Dashboard() {
                       </Link>
                       <button
                         onClick={() => markGoalAsCompleted(goal.id)}
-                        className="bg-green-500 text-white px-2 py-1 rounded"
+                        className="bg-gray-300 text-white w-8 h-8 rounded-md flex items-center justify-center hover:bg-green-500"
                       >
-                        Mark as Completed
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                          <path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/>
+                        </svg>
                       </button>
+
                     </li>
                   ))}
                 </ul>
