@@ -1,6 +1,10 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import NavigationBar from './NavigationBar'
 import Footer from './Footer'
+
+import { useNavigate } from 'react-router-dom';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+
 
 const incentives = [
   {
@@ -23,6 +27,21 @@ const incentives = [
 
 
 export default function LandingPage() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user && localStorage.getItem('rememberMe') === 'true') {
+        navigate('/dashboard');
+      }
+    });
+
+    // Clean up the subscription
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   return (
     

@@ -1,7 +1,8 @@
-import { useState } from 'react';
-import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { useState, useEffect } from 'react';
+import { getAuth, setPersistence, browserLocalPersistence, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import app from '../Firebase';
 import { useNavigate } from 'react-router-dom';
+
 
 
 export default function Login() {
@@ -10,54 +11,94 @@ export default function Login() {
 
   const auth = getAuth();
   const provider = new GoogleAuthProvider();
-  
+
   const handleGoogleSignIn = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
-        // The signed-in user info.
         const user = result.user;
-        // IdP data available using getAdditionalUserInfo(result)
-        // Display the user's name and profile picture
         console.log('Signed in as ' + user.displayName);
         console.log('Profile picture: ' + user.photoURL);
-        // Redirect to the dashboard page
         navigate('/dashboard');
-        // ...
       })
       .catch((error) => {
-        // Handle Google sign-in errors.
         const errorMessage = 'Failed to sign in with Google. Please try again later.';
         setErrorMessage(errorMessage);
       });
   };
-  
+
   function handleSubmit(event) {
     event.preventDefault();
     const email = event.target.email.value;
     const password = event.target.password.value;
+    const rememberMe = event.target['remember-me'].checked;
     const auth = getAuth(app);
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in successfully.
-        const user = userCredential.user;
-        console.log(user);
-        // Redirect to the dashboard page.
-        navigate('/dashboard');
-      })
-      .catch((error) => {
-        // Handle authentication errors.
-        let errorMessage = '';
-        if (error.code === 'auth/user-not-found') {
-          errorMessage = 'Invalid email address.';
-        } else if (error.code === 'auth/wrong-password') {
-          errorMessage = 'Invalid password.';
-        } else {
-          errorMessage = 'Failed to sign in. Please try again later.';
-        }
-        setErrorMessage(errorMessage);
-      });
+
+    if (rememberMe) {
+      setPersistence(auth, browserLocalPersistence)
+        .then(() => {
+          return signInWithEmailAndPassword(auth, email, password);
+        })
+        .then((userCredential) => {
+          const user = userCredential.user;
+          console.log(user);
+          navigate('/dashboard');
+          localStorage.setItem('rememberMe', 'true');
+          localStorage.setItem('email', email);
+          localStorage.setItem('password', password);
+        })
+        .catch((error) => {
+          handleAuthErrors(error);
+        });
+    } else {
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          console.log(user);
+          localStorage.removeItem('rememberMe');
+          localStorage.removeItem('email');
+          localStorage.removeItem('password');
+          navigate('/dashboard');
+        })
+        .catch((error) => {
+          handleAuthErrors(error);
+        });
+    }
   }
-  
+
+  function autoLoginIfRemembered() {
+    const rememberMe = localStorage.getItem('rememberMe');
+    if (rememberMe === 'true') {
+      const email = localStorage.getItem('email');
+      const password = localStorage.getItem('password');
+      const auth = getAuth(app);
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          console.log('User already signed in:', user);
+          navigate('/dashboard');
+        })
+        .catch((error) => {
+          handleAuthErrors(error);
+        });
+    }
+  }
+
+  useEffect(() => {
+    autoLoginIfRemembered();
+  }, []);
+
+  function handleAuthErrors(error) {
+    let errorMessage = '';
+    if (error.code === 'auth/user-not-found') {
+      errorMessage = 'Invalid email address.';
+    } else if (error.code === 'auth/wrong-password') {
+      errorMessage = 'Invalid password.';
+    } else {
+      errorMessage = 'Failed to sign in. Please try again later.';
+    }
+    setErrorMessage(errorMessage);
+  }
   
     return (
       <>
