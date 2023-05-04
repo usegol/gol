@@ -133,15 +133,15 @@ export default function Dashboard() {
                       className="p-3 bg-gray-100 border border-gray-200 rounded flex justify-between items-center"
                     >
                       <div
-                        className="w-4 h-full mr-4"
+                        className="w-2 h-full"
                         style={{ backgroundColor: goal.color }}
                       ></div>
-                      <Link
-                        to={`/goal/${goal.id}`}
-                        className="text-black font-semibold flex-grow"
-                      >
-                        {goal.title}
-                      </Link>
+                    <Link
+                      to={`/goal/${goal.id}`}
+                      className=" text-black font-semibold flex-grow"
+                    >
+                      {goal.title}
+                    </Link>
                       <button
                         onClick={() => markGoalAsCompleted(goal.id)}
                         className="bg-gray-300 text-white w-8 h-8 rounded-md flex items-center justify-center hover:bg-green-500"
