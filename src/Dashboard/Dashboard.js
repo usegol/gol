@@ -84,7 +84,7 @@ export default function Dashboard() {
   };
 
   if (!user) {
-    navigate('/login');
+    navigate('/test');
   } else {
     return (
       <div className="min-h-screen bg-gray-100 font-inter">
