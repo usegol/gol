@@ -92,7 +92,10 @@ export default function Dashboard() {
           <div className="container mx-auto flex justify-between items-center">
             <img src='./assets/logo.png' alt="Logo" className="h-8" />
             <button
-              onClick={() => auth.signOut()}
+              onClick={() => {
+                localStorage.removeItem('rememberMe');
+                auth.signOut();
+              }}
               className="bg-black text-white px-4 py-2 rounded"
             >
               Sign Out
