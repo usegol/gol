@@ -8,7 +8,7 @@ export default function Planner() {
 
   const handleSignOut = () => {
     auth.signOut();
-    navigate('/login');
+    navigate('/test');
   };
 
   const handleDateChange = (event) => {

@@ -18,7 +18,7 @@ export default function Dashboard() {
         setUser(user);
         fetchGoals(user.uid);
       } else {
-        navigate('/login');
+        navigate('/test');
       }
     });
 
