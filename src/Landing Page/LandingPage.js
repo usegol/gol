@@ -31,17 +31,25 @@ export default function LandingPage() {
 
   useEffect(() => {
     const auth = getAuth();
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    
+    const checkAuthAndNavigate = (user) => {
       if (user && localStorage.getItem('rememberMe') === 'true') {
         navigate('/dashboard');
       }
-    });
-
+    };
+  
+    // Check the current user's authentication state and navigate if necessary
+    checkAuthAndNavigate(auth.currentUser);
+  
+    // Set up a listener for future changes in the authentication state
+    const unsubscribe = onAuthStateChanged(auth, checkAuthAndNavigate);
+  
     // Clean up the subscription
     return () => {
       unsubscribe();
     };
   }, []);
+  
 
   return (
     

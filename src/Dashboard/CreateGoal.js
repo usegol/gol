@@ -87,7 +87,7 @@ function CreateGoal() {
   };
 
   if (!user) {
-    navigate('/login');
+    navigate('/test');
     return null;
   } else {
     return (
