@@ -3,6 +3,7 @@ import { auth, db } from '../Firebase';
 import { useNavigate, Link } from 'react-router-dom';
 import { collection, query, where, onSnapshot, updateDoc, doc } from 'firebase/firestore';
 import { ColorPicker } from './CreateGoal';
+import HabitTracking from './HabitTracking';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -107,6 +108,7 @@ export default function Dashboard() {
             <h2 className="text-2xl font-semibold">Welcome to Gol</h2>
             <p className="text-gray-600">Track your goals and habits, and achieve success.</p>
           </div>
+          <HabitTracking />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="col-span-1 md:col-span-2">
               <div className="bg-white p-6 rounded shadow">
@@ -195,7 +197,7 @@ export default function Dashboard() {
         </main>
         <Link
           to="/create-goal"
-          className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-black text-white flex items-center justify-center hover:bg-gray-800 transition-colors duration-200"
+          className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-black text-white flex items-center justify-center hover:bg-green-500 transition-colors duration-200"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

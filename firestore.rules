@@ -13,8 +13,20 @@ service cloud.firestore {
       allow delete: if request.auth != null && request.auth.uid == resource.data.userId
                     || request.auth != null && request.auth.uid == get(/databases/$(database)/documents/goals/$(resource.data.goalId)).data.userId;
     }
+    // Add rules for habits collection
+  match /habits/{habitId} {
+      // Allow read access if the authenticated user's UID matches the userId field in the document
+      allow read: if request.auth != null && request.auth.uid == resource.data.userId;
+      // Allow write access if the authenticated user's UID matches the userId field in the new document
+      allow write: if request.auth != null && request.auth.uid == request.resource.data.userId;
+    }
+    // Add rules for habitStreaks collection
+    match /habitStreaks/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
   }
 }
+
 
 
 
