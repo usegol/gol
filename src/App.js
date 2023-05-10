@@ -10,6 +10,7 @@ import Login from './Authentication/login';
 import ForgotPasword from './Authentication/ForgotPasword';
 import CreateGoal from './Dashboard/CreateGoal';
 import GoalDetail from './Dashboard/GoalDetail';
+import Dashboard2 from './Dashboard/Dashboard2';
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="create-goal" element={<CreateGoal />} />
           <Route path="/goal/:goalId" element={<GoalDetail />} />
+          <Route path="/dashboard2" element={<Dashboard2 />} />
         </Routes>
       </Router>
     </div>

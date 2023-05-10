@@ -15,7 +15,6 @@ import {
     deleteDoc
 } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
-import { BeakerIcon, BookOpenIcon, LightningBoltIcon, PencilAltIcon, PlayIcon, SpeakerphoneIcon } from '@heroicons/react/outline';
 import { FiTrash2 } from 'react-icons/fi';
 
 
@@ -51,6 +50,7 @@ const predefinedHabits = [
     // icon: PlayIcon,
   },
 ];
+
 
 export default function HabitTracking() {
   const [habits, setHabits] = useState([]);
@@ -226,7 +226,7 @@ return (
           className={`p-3 bg-gray-100 border border-gray-200 rounded flex justify-between items-center cursor-pointer`}
         >
           <span className="text-black font-semibold">{habit.title}</span>
-          <span className="text-black font-semibold">{habitStreaks[habit.id] || 0} days           <button onClick={() => deleteHabit(habit.id)} className="text-red-100 focus:outline-none hover:text-red-500">
+          <span className="text-black font-semibold">{habitStreaks[habit.id] || 0} days  <button onClick={() => deleteHabit(habit.id)} className="text-red-100 focus:outline-none hover:text-red-500">
             <FiTrash2 size={18} />
           </button></span>
         </li>

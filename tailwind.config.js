@@ -14,9 +14,7 @@ module.exports = {
         ],
       },
       backgroundColor: {
-        primary: '#000000',
-        secondary: '#FFFFFF',
-        hoverPrimary: '#F9FAFB',
+        'bg-black': '#e5e5e5',
       },
       textColor: {
         primary: '#000000',
