@@ -15,10 +15,10 @@ const user = {
     imageUrl: './assets/user.png'
   }
   const navigation = [
-    // { name: 'Dashboard', href: '#', current: true },
+    { name: 'Dashboard', href: '/dashboard', current: true },
+    { name: 'Calendar', href: '/calendar', current: false },
     // { name: 'Team', href: '#', current: false },
     // { name: 'Projects', href: '#', current: false },
-    // { name: 'Calendar', href: '#', current: false },
   ]
   const userNavigation = [
     // { name: 'Your Profile', href: '#' },
