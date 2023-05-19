@@ -11,7 +11,8 @@ import ForgotPasword from './Authentication/ForgotPasword';
 import CreateGoal from './Dashboard/CreateGoal';
 import GoalDetail from './Dashboard/GoalDetail';
 import UserCalendar from './Calendar/Calendar';
-import MyCalendar from './Calendar/Calendar2';
+import MyCalendar from './Calendar/Calendar';
+import Journal from './Dashboard/Journal';
 
 export default function App() {
   return (
@@ -30,7 +31,7 @@ export default function App() {
           <Route path="/goal/:goalId" element={<GoalDetail />} />
           {/* <Route path="/calendar" element={<UserCalendar />} /> */}
           <Route path="/calendar" element={<MyCalendar />} />
-
+          <Route path="/journal" element={<Journal /> } />
         </Routes>
       </Router>
     </div>

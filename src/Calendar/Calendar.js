@@ -17,9 +17,9 @@ function classNames(...classes) {
 const navigation = [
     { name: 'Dashboard', href: '/dashboard', current: false },
     { name: 'Calendar', href: '/calendar', current: true },
-    // { name: 'Team', href: '#', current: false },
+    { name: 'Journal', href: '/journal', current: false },
     // { name: 'Projects', href: '#', current: false },
-]
+  ]
 
 const UserCalendar = () => {
     const navigate = useNavigate();

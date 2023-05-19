@@ -10,9 +10,9 @@ import {
   getDoc,
   updateDoc,
   addDoc,
-  writeBatch, 
-  setDoc,
-  deleteDoc
+  writeBatch,
+  deleteField,
+  serverTimestamp,
 } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { FiTrash2 } from 'react-icons/fi';
@@ -50,36 +50,37 @@ export default function HabitTracking() {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const auth = getAuth();
-  const [selectedHabits, setSelectedHabits] = useState([]);
+  const [selectedHabits, setSelectedHabits] = useState(new Set());
   const [showHabitSelection, setShowHabitSelection] = useState(false);
   const [newHabit, setNewHabit] = useState("");
   const [hoveredHabit, setHoveredHabit] = useState(null);
 
-
   const handleHabitSelection = (habit) => {
-    if (selectedHabits.find((selected) => selected.id === habit.id)) {
-      setSelectedHabits(selectedHabits.filter((selected) => selected.id !== habit.id));
+    if (selectedHabits.has(habit.id)) {
+      selectedHabits.delete(habit.id);
     } else {
-      setSelectedHabits([...selectedHabits, habit]);
+      selectedHabits.add(habit.id);
     }
+    setSelectedHabits(new Set(selectedHabits));
   };
 
   const saveSelectedHabits = async () => {
-    const habitsRef = collection(db, 'habits');
     const batch = writeBatch(db);
-  
-    selectedHabits.forEach((habit) => {
+
+    selectedHabits.forEach((habitId) => {
       const habitData = {
-        title: habit.title,
+        title: predefinedHabits.find((habit) => habit.id === habitId).title,
         userId: user.uid,
-        predefinedId: habit.id,
+        predefinedId: habitId,
+        completed: [],
+        streak: 0,
       };
-      const newHabitRef = doc(habitsRef);
+      const newHabitRef = doc(collection(db, 'habits'));
       batch.set(newHabitRef, habitData);
     });
-  
+
     await batch.commit();
-    setSelectedHabits([]);
+    setSelectedHabits(new Set());
     setShowHabitSelection(false);
   };
 
@@ -119,32 +120,28 @@ export default function HabitTracking() {
     const habitStreaksDoc = await getDoc(habitStreaksRef);
 
     if (habitStreaksDoc.exists()) {
-      setHabitStreaks(prevState => ({...prevState, [userId]: habitStreaksDoc.data()}));
+      setHabitStreaks({ [userId]: habitStreaksDoc.data() });
     }
   };
 
   const completeHabit = async (habit) => {
     const habitRef = doc(db, 'habits', habit.id);
-    const habitStreaksRef = doc(db, 'habitStreaks', user.uid);
 
-    if (!habitStreaks[habit.predefinedId]) {
-      await setDoc(habitStreaksRef, { [habit.predefinedId]: 1 }, { merge: true });
-    } else {
-      await updateDoc(habitStreaksRef, {
-        [habit.predefinedId]: habitStreaks[habit.predefinedId] + 1,
-      });
-    }
-
-    await deleteDoc(habitRef);
+    await updateDoc(habitRef, {
+      completed: [...habit.completed, serverTimestamp()],
+      streak: habit.streak + 1,
+    });
   };
 
   const addNewHabit = async () => {
-    const habitsRef = collection(db, 'habits');
     const habitData = {
       title: newHabit,
       userId: user.uid,
+      predefinedId: null,
+      completed: [],
+      streak: 0,
     };
-    await addDoc(habitsRef, habitData);
+    await addDoc(collection(db, 'habits'), habitData);
     setNewHabit("");
   };
 
@@ -163,7 +160,7 @@ export default function HabitTracking() {
                 key={habit.id}
                 onClick={() => handleHabitSelection(habit)}
                 className={`p-3 bg-gray-100 border border-gray-200 rounded flex justify-between items-center cursor-pointer ${
-                  selectedHabits.find((selected) => selected.id === habit.id)
+                  selectedHabits.has(habit.id)
                     ? 'bg-gray-400'
                     : ''
                 }`}
@@ -183,7 +180,7 @@ export default function HabitTracking() {
         {habits.map((habit) => (
           <div
             key={habit.id}
-            className={`bg-gray-100 p-3 rounded mr-2 ${selectedHabits.find((selected) => selected.id === habit.predefinedId) ? 'rounded-lg' : ''}`}
+            className={`bg-gray-100 p-3 rounded mr-2 ${selectedHabits.has(habit.predefinedId) ? 'rounded-lg' : ''}`}
             onMouseEnter={() => setHoveredHabit(habit.id)}
             onMouseLeave={() => setHoveredHabit(null)}
           >
@@ -193,11 +190,10 @@ export default function HabitTracking() {
                 <FiTrash2 onClick={() => completeHabit(habit)} className="text-black cursor-pointer" />
               )}
             </div>
-            <p className="text-gray-500">Streak: {habitStreaks[habit.predefinedId]?.streak || 0}</p>
+            <p className="text-gray-500">Streak: {habit.streak || 0}</p>
           </div>
         ))}
       </div>
     </div>
   );
-
 }

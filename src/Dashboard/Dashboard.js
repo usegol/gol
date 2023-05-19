@@ -17,7 +17,7 @@ const users = {
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', current: true },
     { name: 'Calendar', href: '/calendar', current: false },
-    // { name: 'Team', href: '#', current: false },
+    { name: 'Journal', href: '/journal', current: false },
     // { name: 'Projects', href: '#', current: false },
   ]
   const userNavigation = [
@@ -222,12 +222,12 @@ export default function Dashboard2() {
         )}
       </Disclosure>
 
-      <div className="py-10">
-        <header>
+      <div >
+        {/* <header>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <h1 className="text-3xl font-bold leading-tight tracking-tight text-gray-900">Dashboard</h1>
           </div>
-        </header>
+        </header> */}
         <main>
             <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
             <main className="container mx-auto mt-10 p-4">
