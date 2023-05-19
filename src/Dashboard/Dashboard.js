@@ -235,7 +235,7 @@ export default function Dashboard2() {
                     <h2 className="text-2xl font-semibold">Welcome to Gol</h2>
                     <p className="text-gray-600">Track your goals and habits, and achieve success.</p>
                 </div> */}
-                <HabitTracking user={user} />
+                <HabitTracking />
                 <Goals />
                 <AddGoal />
             </main>
