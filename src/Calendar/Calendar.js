@@ -8,7 +8,6 @@ import { createEvent } from '../api/googleCalendar'; // Replace this with your G
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-
 const localizer = momentLocalizer(moment);
 
 function classNames(...classes) {
@@ -46,21 +45,20 @@ const UserCalendar = () => {
 
     useEffect(() => {
         const initClient = async () => {
-            await window.gapi.load('auth2', () => {
-                window.gapi.auth2.init({
-                    client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-                }).then(() => {
-                    const authInstance = window.gapi.auth2.getAuthInstance();
-                    updateSigninStatus(authInstance.isSignedIn.get());
-                    authInstance.isSignedIn.listen(updateSigninStatus);
-                });
+            await window.gapi.client.init({
+                apiKey: process.env.REACT_APP_GOOGLE_API_KEY, // Replace with your Google API key
+                clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID, // Replace with your Google OAuth client ID
+                discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'],
+                scope: 'https://www.googleapis.com/auth/calendar',
             });
+            window.gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+            updateSigninStatus(window.gapi.auth2.getAuthInstance().isSignedIn.get());
         };
 
         if (window.gapi) {
-            initClient();
+            window.gapi.load('client:auth2', initClient);
         }
-    }, []);
+    }, [navigate]);
 
     const updateSigninStatus = (isSignedIn) => {
         setIsAuthenticated(isSignedIn);
@@ -69,37 +67,42 @@ const UserCalendar = () => {
         }
     };
 
-    const handleSignIn = () => {
-        const authInstance = window.gapi.auth2.getAuthInstance();
-        if (!authInstance.isSignedIn.get()) {
-            authInstance.signIn();
-        }
-    };
-
     const fetchEvents = async () => {
-        const authInstance = window.gapi.auth2.getAuthInstance();
-        const currentUser = authInstance.currentUser.get();
-        const accessToken = currentUser.getAuthResponse().access_token;
-        const calendarId = currentUser.getBasicProfile().getEmail();
-
-        const response = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events`, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        });
-
-        const data = await response.json();
-        setEvents(data.items);
-    };
+      const authInstance = window.gapi.auth2.getAuthInstance();
+      const currentUser = authInstance.currentUser.get();
+      const accessToken = currentUser.getAuthResponse().access_token;
+      const calendarId = currentUser.getBasicProfile().getEmail();
+  
+      const response = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events`, {
+          headers: {
+              Authorization: `Bearer ${accessToken}`,
+          },
+      });
+  
+      const data = await response.json();
+      console.log(data); // Log the raw data
+  
+      // Transform the events into the format expected by react-big-calendar
+      const transformedEvents = data.items.map((item) => ({
+          title: item.summary,
+          start: new Date(item.start.dateTime || item.start.date),
+          end: new Date(item.end.dateTime || item.end.date),
+      }));
+  
+      console.log(transformedEvents); // Log the transformed events
+  
+      setEvents(transformedEvents);
+  };
+  
 
     const handleCreateEventsFromPrompt = async () => {
-        if (!userPrompt) {
-            alert('Please enter a prompt');
-            return;
-        }
+      if (!userPrompt) {
+          alert('Please enter a prompt');
+          return;
+      }
 
-        const gptResponse = await generateEventsFromPrompt(userPrompt);
-        if (!gptResponse) {
+      const gptResponse = await generateEventsFromPrompt(userPrompt);
+      if (!gptResponse) {
           alert('Error generating events from the prompt');
           return;
       }
@@ -117,7 +120,7 @@ const UserCalendar = () => {
 
       alert('Events created successfully');
       setUserPrompt('');
-      fetchEvents();
+      fetchEvents(); // Fetch events again after creating new ones
   };
 
   if (!user) {
@@ -162,41 +165,41 @@ const UserCalendar = () => {
                                       </div>
                                   </div>
                                   <div className="hidden sm:ml-6 sm:flex sm:items-center">
-                                      <button
-                                          onClick={() => {
-                                              localStorage.removeItem('rememberMe');
-                                              auth.signOut();
-                                          }}
-                                          className="bg-black text-white px-4 py-2 rounded"
-                                      >
-                                          Sign Out
-                                      </button>
-                                  </div>
-                              </div>
-                          </div>
-                      </>
-                  )}
-              </Disclosure>
+                                  <button
+                                            onClick={() => {
+                                                localStorage.removeItem('rememberMe');
+                                                auth.signOut();
+                                            }}
+                                            className="bg-black text-white px-4 py-2 rounded"
+                                        >
+                                            Sign Out
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    )}
+                </Disclosure>
 
-              <div className="py-10">
-                  <header>
-                      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                          <h1 className="text-3xl font-bold leading-tight tracking-tight text-gray-900">
-                              Calendar
-                          </h1>
-                      </div>
-                  </header>
-                  <main>
-                      <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                          <div className="container mx-auto mt-10 p-4">
-                              <h1 className="text-3xl mb-2 text-left font-bold">Create Events with AI</h1>
-                              <input
-                                  type="text"
-                                  value={userPrompt}
-                                  onChange={(e) => setUserPrompt(e.target.value)}
-                                  placeholder="Enter a prompt"
-                                  className="w-full p-2 border border-gray-300 rounded mb-4"
-                              />
+                <div className="py-10">
+                    <header>
+                        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                            <h1 className="text-3xl font-bold leading-tight tracking-tight text-gray-900">
+                                Calendar
+                            </h1>
+                        </div>
+                    </header>
+                    <main>
+                        <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                            <div className="container mx-auto mt-10 p-4">
+                                <h1 className="text-3xl mb-2 text-left font-bold">Create Events with AI</h1>
+                                <input
+                                    type="text"
+                                    value={userPrompt}
+                                    onChange={(e) => setUserPrompt(e.target.value)}
+                                    placeholder="Enter a prompt"
+                                    className="w-full p-2 border border-gray-300 rounded mb-4"
+                                />
                                 <button onClick={handleCreateEventsFromPrompt} className="bg-black text-white px-4 py-2 rounded">
                                     Create Events
                                 </button>
@@ -204,11 +207,7 @@ const UserCalendar = () => {
                                     <div style={{ height: 500 }}>
                                         <Calendar
                                             localizer={localizer}
-                                            events={events.map(event => ({
-                                                title: event.summary,
-                                                start: new Date(event.start.dateTime),
-                                                end: new Date(event.end.dateTime),
-                                            }))}
+                                            events={events}
                                             startAccessor="start"
                                             endAccessor="end"
                                         />
@@ -224,5 +223,3 @@ const UserCalendar = () => {
 };
 
 export default UserCalendar;
-
-

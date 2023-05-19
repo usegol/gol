@@ -9,7 +9,7 @@ import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
-const user = {
+const users = {
     name: 'Tom Cook',
     email: 'tom@example.com',
     imageUrl: './assets/user.png'
@@ -235,7 +235,7 @@ export default function Dashboard2() {
                     <h2 className="text-2xl font-semibold">Welcome to Gol</h2>
                     <p className="text-gray-600">Track your goals and habits, and achieve success.</p>
                 </div> */}
-                <HabitTracking />
+                <HabitTracking user={user} />
                 <Goals />
                 <AddGoal />
             </main>

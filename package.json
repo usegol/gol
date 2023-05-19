@@ -15,6 +15,7 @@
     "firebase": "^9.19.1",
     "firebase-admin": "^11.7.0",
     "firebase-functions": "^4.3.1",
+    "gapi-script": "^1.2.0",
     "googleapis": "^118.0.0",
     "moment": "^2.29.4",
     "openai": "^3.2.1",
