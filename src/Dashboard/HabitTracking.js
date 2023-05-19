@@ -53,6 +53,8 @@ export default function HabitTracking() {
   const [selectedHabits, setSelectedHabits] = useState([]);
   const [showHabitSelection, setShowHabitSelection] = useState(false);
   const [newHabit, setNewHabit] = useState("");
+  const [hoveredHabit, setHoveredHabit] = useState(null);
+
 
   const handleHabitSelection = (habit) => {
     if (selectedHabits.find((selected) => selected.id === habit.id)) {
@@ -179,10 +181,17 @@ export default function HabitTracking() {
       }
       <div className="flex overflow-x-auto whitespace-nowrap py-2" style={{ scrollbarWidth: 'thin' }}>
         {habits.map((habit) => (
-          <div key={habit.id} className={`bg-gray-100 p-3 rounded mr-2 ${selectedHabits.find((selected) => selected.id === habit.predefinedId) ? 'rounded-lg' : ''}`}>
+          <div
+            key={habit.id}
+            className={`bg-gray-100 p-3 rounded mr-2 ${selectedHabits.find((selected) => selected.id === habit.predefinedId) ? 'rounded-lg' : ''}`}
+            onMouseEnter={() => setHoveredHabit(habit.id)}
+            onMouseLeave={() => setHoveredHabit(null)}
+          >
             <div className="flex justify-between items-center">
               <h4 className="font-semibold text-lg">{habit.title}</h4>
-              <FiTrash2 onClick={() => completeHabit(habit)} className="text-black cursor-pointer" />
+              {hoveredHabit === habit.id && (
+                <FiTrash2 onClick={() => completeHabit(habit)} className="text-black cursor-pointer" />
+              )}
             </div>
             <p className="text-gray-500">Streak: {habitStreaks[habit.predefinedId]?.streak || 0}</p>
           </div>
@@ -190,4 +199,5 @@ export default function HabitTracking() {
       </div>
     </div>
   );
+
 }
