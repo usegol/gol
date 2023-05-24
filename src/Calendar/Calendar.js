@@ -118,6 +118,7 @@ const UserCalendar = () => {
           await createEvent(eventData, calendarId, accessToken);
       }
 
+      mixpanel.track('User Entered Calendar Prompt');
       alert('Events created successfully');
       setUserPrompt('');
       fetchEvents(); // Fetch events again after creating new ones

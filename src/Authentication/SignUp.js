@@ -3,6 +3,7 @@ import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthPro
 import { useNavigate } from 'react-router-dom';
 import app, { db } from '../Firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import mixpanel from '../Mixpanel';
 
 
 
@@ -33,6 +34,7 @@ function SignUpEmailPassword(props) {
     const handleGoogleSignIn = () => {
       signInWithPopup(auth, provider)
         .then((result) => {
+          mixpanel.track('User Created');
           // The signed-in user info.
           const user = result.user;
           // IdP data available using getAdditionalUserInfo(result)
@@ -69,6 +71,7 @@ function SignUpEmailPassword(props) {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
+      mixpanel.track('User Created');
       props.onNextStep();
     } catch (error) {
       const errorCode = error.code;
