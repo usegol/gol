@@ -33,9 +33,13 @@ function SignUpEmailPassword(props) {
     const handleGoogleSignIn = () => {
       signInWithPopup(auth, provider)
         .then((result) => {
-          Mixpanel.track('User Created');
           // The signed-in user info.
           const user = result.user;
+          
+          Mixpanel.track('User Created', {
+            name: user.displayName,
+            email: user.email
+          });
           // IdP data available using getAdditionalUserInfo(result)
           // Display the user's name and profile picture
         console.log('Signed in as ' + user.displayName);
@@ -70,8 +74,12 @@ function SignUpEmailPassword(props) {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      Mixpanel.track('User Created');
+      Mixpanel.track('User Created', {
+        name: user.displayName,
+        email: user.email
+      });
       props.onNextStep();
+
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.message;

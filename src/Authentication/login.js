@@ -18,8 +18,12 @@ export default function Login() {
         const user = result.user;
         console.log('Signed in as ' + user.displayName);
         console.log('Profile picture: ' + user.photoURL);
-        Mixpanel.track('User Signed In');
+        Mixpanel.track('User Signed In', {
+          email: user.email,
+          name: user.displayName
+        });
         navigate('/dashboard');
+
       })
       .catch((error) => {
         const errorMessage = 'Failed to sign in with Google. Please try again later.';

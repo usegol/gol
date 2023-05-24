@@ -11,11 +11,12 @@ import {
   updateDoc,
   addDoc,
   writeBatch,
-  deleteField,
+  deleteDoc,
   serverTimestamp,
 } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { FiTrash2 } from 'react-icons/fi';
+
 
 const predefinedHabits = [
   {
@@ -133,6 +134,12 @@ export default function HabitTracking() {
     });
   };
 
+  const deleteHabit = async (habit) => {
+    const habitRef = doc(db, 'habits', habit.id);
+    await deleteDoc(habitRef);
+  };
+  
+
   const addNewHabit = async () => {
     const habitData = {
       title: newHabit,
@@ -187,7 +194,7 @@ export default function HabitTracking() {
             <div className="flex justify-between items-center">
               <h4 className="font-semibold text-lg">{habit.title}</h4>
               {hoveredHabit === habit.id && (
-                <FiTrash2 onClick={() => completeHabit(habit)} className="text-black cursor-pointer" />
+                <FiTrash2 onClick={() => deleteHabit(habit)} className="text-black cursor-pointer" />
               )}
             </div>
             <p className="text-gray-500">Streak: {habit.streak || 0}</p>
