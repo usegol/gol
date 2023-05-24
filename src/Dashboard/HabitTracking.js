@@ -12,7 +12,8 @@ import {
   addDoc,
   writeBatch,
   deleteDoc,
-  serverTimestamp,
+  arrayUnion, 
+  arrayRemove
 } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { FiTrash2 } from 'react-icons/fi';
@@ -55,6 +56,7 @@ export default function HabitTracking() {
   const [showHabitSelection, setShowHabitSelection] = useState(false);
   const [newHabit, setNewHabit] = useState("");
   const [hoveredHabit, setHoveredHabit] = useState(null);
+  const [message, setMessage] = useState("");
 
   const handleHabitSelection = (habit) => {
     if (selectedHabits.has(habit.id)) {
@@ -90,7 +92,6 @@ export default function HabitTracking() {
       if (user) {
         setUser(user);
         fetchHabits(user.uid);
-        fetchHabitStreaks(user.uid);
       } else {
         navigate('/test');
       }
@@ -101,38 +102,88 @@ export default function HabitTracking() {
     };
   }, [navigate]);
 
-  const fetchHabits = async (userId) => {
-    const habitsRef = collection(db, 'habits');
-    const habitsQuery = query(habitsRef, where('userId', '==', userId));
+// ...
 
-    const unsubscribe = onSnapshot(habitsQuery, (querySnapshot) => {
-      const habitsData = [];
-      querySnapshot.forEach((doc) => {
-        habitsData.push({ id: doc.id, ...doc.data() });
+// This function takes a habit object and updates its streak.
+const updateStreak = async (habit) => {
+  const habitRef = doc(db, 'habits', habit.id);
+  let lastCompletion = habit.completed.length > 0 ? new Date(habit.completed[habit.completed.length - 1].seconds * 1000) : null;
+
+  if (lastCompletion) {
+    lastCompletion.setHours(0, 0, 0, 0); // normalize time part
+
+    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0); // normalize time part
+
+    const daysSinceLastCompletion = Math.round((currentDate - lastCompletion) / oneDay);
+
+    if (daysSinceLastCompletion > 1) {
+      // If more than 1 day has passed since the last completion, reset the streak
+      await updateDoc(habitRef, {
+        streak: 0
       });
-      setHabits(habitsData);
-    });
-
-    return () => unsubscribe();
-  };
-
-  const fetchHabitStreaks = async (userId) => {
-    const habitStreaksRef = doc(db, 'habitStreaks', userId);
-    const habitStreaksDoc = await getDoc(habitStreaksRef);
-
-    if (habitStreaksDoc.exists()) {
-      setHabitStreaks({ [userId]: habitStreaksDoc.data() });
     }
-  };
+  }
+};
+
+
+const fetchHabits = async (userId) => {
+  const habitsRef = collection(db, 'habits');
+  const habitsQuery = query(habitsRef, where('userId', '==', userId));
+
+  const unsubscribe = onSnapshot(habitsQuery, (querySnapshot) => {
+    const habitsData = [];
+    querySnapshot.forEach((doc) => {
+      const habit = { id: doc.id, ...doc.data() };
+      habitsData.push(habit);
+      updateStreak(habit);  // Update the streak of each habit
+    });
+    setHabits(habitsData);
+  });
+
+  return () => unsubscribe();
+};
+
+// ...
+
+
+
 
   const completeHabit = async (habit) => {
     const habitRef = doc(db, 'habits', habit.id);
-
-    await updateDoc(habitRef, {
-      completed: [...habit.completed, serverTimestamp()],
-      streak: habit.streak + 1,
-    });
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0); // normalize time part to avoid miscompares
+  
+    let lastCompletion = habit.completed.length > 0 ? new Date(habit.completed[habit.completed.length - 1].seconds * 1000) : null;
+    if (lastCompletion) {
+      lastCompletion.setHours(0, 0, 0, 0); // normalize time part
+    }
+  
+    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+    const daysSinceLastCompletion = lastCompletion ? Math.round((currentDate - lastCompletion) / oneDay) : null;
+  
+    let newStreak;
+    if (daysSinceLastCompletion === null || daysSinceLastCompletion === 1) {
+      // increment the streak if the habit was last completed yesterday or has never been completed before
+      newStreak = lastCompletion === null ? 1 : habit.streak + 1;
+    } else if (daysSinceLastCompletion > 1) {
+      // reset the streak if the habit was last completed more than 1 day ago
+      newStreak = 0;
+    }
+  
+    if (!lastCompletion || +lastCompletion !== +currentDate) {
+      // add a new date to completed array only if last completion wasn't today
+      await updateDoc(habitRef, {
+        streak: newStreak,
+        completed: arrayUnion(currentDate),
+      });
+      setMessage("");
+    } else {
+      setMessage("You have already completed this habit today.");
+    }
   };
+  
 
   const deleteHabit = async (habit) => {
     const habitRef = doc(db, 'habits', habit.id);
@@ -158,6 +209,7 @@ export default function HabitTracking() {
         <h3 className="text-xl font-semibold">Habit Tracking</h3>
         <button className="bg-black text-white py-1 px-3 rounded hover:bg-green-400" onClick={() => setShowHabitSelection(!showHabitSelection)}>Choose Habits</button>
       </div>
+      {message && <h3 className="text-s font-semibold text-red-500">{message}</h3>}
       {showHabitSelection && 
         <div className="mb-4 overflow-x-auto whitespace-nowrap py-2" style={{ scrollbarWidth: 'thin' }}>
           <h4 className="text-md font-semibold mb-2">Choose habits:</h4>
@@ -186,6 +238,7 @@ export default function HabitTracking() {
       <div className="flex overflow-x-auto whitespace-nowrap py-2" style={{ scrollbarWidth: 'thin' }}>
         {habits.map((habit) => (
           <div
+            onClick={() => completeHabit(habit)}
             key={habit.id}
             className={`bg-gray-100 p-3 rounded mr-2 ${selectedHabits.has(habit.predefinedId) ? 'rounded-lg' : ''}`}
             onMouseEnter={() => setHoveredHabit(habit.id)}
