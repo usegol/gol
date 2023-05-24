@@ -5,8 +5,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import mixpanel from '../Mixpanel';
-
+import { Mixpanel } from '../Mixpanel';
 // Add the ColorPicker component
 function ColorPicker({ onSelect }) {
   const colors = ['#F87171', '#FBBF24', '#34D399', '#60A5FA', '#9333EA', '#FB7185', '#65A30D'];
@@ -104,7 +103,7 @@ function CreateGoal() {
         heightIn: goalType === 'fitness' ? heightIn : null,
         weight: goalType === 'fitness' ? weight : null,
       });
-      mixpanel.track('Goal Created');
+      Mixpanel.track('Goal Created');
       console.log('Goal successfully added!');
       navigate('/dashboard');
     } catch (error) {

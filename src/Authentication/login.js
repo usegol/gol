@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import { getAuth, setPersistence, browserLocalPersistence, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import app from '../Firebase';
 import { useNavigate } from 'react-router-dom';
-import mixpanel from '../Mixpanel';
-
+import { Mixpanel } from '../Mixpanel';
 
 
 export default function Login() {
@@ -19,7 +18,7 @@ export default function Login() {
         const user = result.user;
         console.log('Signed in as ' + user.displayName);
         console.log('Profile picture: ' + user.photoURL);
-        mixpanel.track('User Signed In');
+        Mixpanel.track('User Signed In');
         navigate('/dashboard');
       })
       .catch((error) => {
@@ -47,7 +46,7 @@ export default function Login() {
           localStorage.setItem('rememberMe', 'true');
           localStorage.setItem('email', email);
           localStorage.setItem('password', password);
-          mixpanel.track('User Signed In');
+          Mixpanel.track('User Signed In');
         })
         .catch((error) => {
           handleAuthErrors(error);
@@ -61,7 +60,7 @@ export default function Login() {
           localStorage.removeItem('email');
           localStorage.removeItem('password');
           navigate('/dashboard');
-          mixpanel.track('User Signed In');
+          Mixpanel.track('User Signed In');
         })
         .catch((error) => {
           handleAuthErrors(error);

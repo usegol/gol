@@ -8,6 +8,8 @@ import { createEvent } from '../api/googleCalendar'; // Replace this with your G
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { Mixpanel } from '../Mixpanel';
+
 const localizer = momentLocalizer(moment);
 
 function classNames(...classes) {
@@ -118,7 +120,7 @@ const UserCalendar = () => {
           await createEvent(eventData, calendarId, accessToken);
       }
 
-      mixpanel.track('User Entered Calendar Prompt');
+      Mixpanel.track('User Entered Calendar Prompt');
       alert('Events created successfully');
       setUserPrompt('');
       fetchEvents(); // Fetch events again after creating new ones
