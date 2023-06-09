@@ -105,34 +105,42 @@ export default function Goals() {
                   </button>
                 </div>
                 <ul className="space-y-2">
-                  {filteredGoals.map((goal) => (
-                    <li
-                      key={goal.id}
-                      onClick={() => navigate(`/goal/${goal.id}`)}
-                      className="p-3 bg-gray-100 border border-gray-200 rounded flex justify-between items-center"
-                    >
-                      <div
-                        className="w-2 h-full"
-                        style={{ backgroundColor: goal.color }}
-                      ></div>
-                    <Link
-                      to={`/goal/${goal.id}`}
-                      className=" text-black font-semibold flex-grow"
-                    >
-                      {goal.title}
-                    </Link>
-                      <button
-                        onClick={() => markGoalAsCompleted(goal.id)}
-                        className="bg-gray-300 text-white w-8 h-8 rounded-md flex items-center justify-center hover:bg-green-500"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                          <path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/>
-                        </svg>
-                      </button>
+  {filteredGoals.map((goal) => (
+    <li
+      key={goal.id}
+      onClick={() => navigate(`/goal/${goal.id}`)}
+      className="p-3 bg-gray-100 border border-gray-200 rounded flex justify-between items-center"
+    >
+      <div
+        className="w-2 h-full"
+        style={{ backgroundColor: goal.color }}
+      ></div>
+      <Link
+        to={`/goal/${goal.id}`}
+        className="text-black font-semibold flex-grow overflow-hidden"
+        style={{ maxWidth: "calc(100% - 64px)" }} // Adjust the value based on your needs
+      >
+        <div style={{ overflow: "auto", whiteSpace: "nowrap" }}>
+          {goal.title}
+        </div>
+      </Link>
+      <button
+        onClick={() => markGoalAsCompleted(goal.id)}
+        className="bg-gray-300 text-white w-8 h-8 rounded-md flex items-center justify-center hover:bg-green-500"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-4 w-4"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path d="M0 11l2-2 5 5L18 3l2 2L7 18z" />
+        </svg>
+      </button>
+    </li>
+  ))}
+</ul>
 
-                    </li>
-                  ))}
-                </ul>
               </div>
             </div>
             <div className="col-span-1 md:col-span-2 mb-4">
