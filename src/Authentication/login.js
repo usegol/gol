@@ -3,7 +3,7 @@ import { getAuth, setPersistence, browserLocalPersistence, signInWithEmailAndPas
 import app from '../Firebase';
 import { useNavigate } from 'react-router-dom';
 import { Mixpanel } from '../Mixpanel';
-
+import { logEvent } from 'firebase/analytics';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -18,6 +18,11 @@ export default function Login() {
         const user = result.user;
         console.log('Signed in as ' + user.displayName);
         console.log('Profile picture: ' + user.photoURL);
+        // google log event user signed in
+        logEvent(auth, 'User logged in', {
+          method: 'google',
+        });
+
         Mixpanel.track('User Signed In', {
           email: user.email,
           name: user.displayName
@@ -50,6 +55,9 @@ export default function Login() {
           localStorage.setItem('rememberMe', 'true');
           localStorage.setItem('email', email);
           localStorage.setItem('password', password);
+          logEvent(auth, 'User logged in', {
+            method: 'email',
+          });
           Mixpanel.track('User Signed In');
         })
         .catch((error) => {
@@ -64,6 +72,9 @@ export default function Login() {
           localStorage.removeItem('email');
           localStorage.removeItem('password');
           navigate('/dashboard');
+          logEvent(auth, 'User logged in', {
+            method: 'email',
+          });
           Mixpanel.track('User Signed In');
         })
         .catch((error) => {
@@ -83,6 +94,10 @@ export default function Login() {
         .then((userCredential) => {
           const user = userCredential.user;
           console.log('User already signed in:', user);
+          logEvent(auth, 'User logged in', {
+            method: 'email',
+          });
+          Mixpanel.track('User Signed In');
           navigate('/dashboard');
         })
         .catch((error) => {

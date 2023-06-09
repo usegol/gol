@@ -89,7 +89,7 @@ async function createEvent(event, timeZone) {
 //   }
   
  
-export function MyCalendar() {
+export function MyCalendar2() {
   const [events, setEvents] = useState([]);
   const [prompt, setPrompt] = useState('');
 

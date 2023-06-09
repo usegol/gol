@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db, auth } from '../Firebase';
-import { collection, addDoc, Timestamp } from 'firebase/firestore';
+import { collection, addDoc, Timestamp, query, where, onSnapshot } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { Disclosure, Menu, Transition } from '@headlessui/react'
@@ -68,26 +68,57 @@ function CreateGoal() {
   const [heightFt, setHeightFt] = useState('');
   const [heightIn, setHeightIn] = useState('');
   const [weight, setWeight] = useState('');
+  const [activeGoals, setActiveGoals] = useState();
 
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
+
+        // Fetch active goals when user is authenticated
+        const fetchActiveGoals = () => {
+          const q = query(collection(db, 'goals'), where('userId', '==', currentUser.uid));
+
+          const unsubscribeGoals = onSnapshot(q, (querySnapshot) => {
+            let activeGoalsCount = 0;
+
+            querySnapshot.forEach((doc) => {
+              const goalData = { id: doc.id, ...doc.data() };
+
+              if (!goalData.completed) {
+                activeGoalsCount++;
+              }
+            });
+
+            setActiveGoals(activeGoalsCount);
+          });
+
+          return () => unsubscribeGoals();
+        };
+
+        fetchActiveGoals();
       } else {
         setUser(null);
+        setActiveGoals(0); // Reset active goals count when user logs out
       }
     });
 
     // Clean up the listener when the component is unmounted
     return () => {
-      unsubscribe();
+      unsubscribeAuth();
     };
-  }, []);
+}, []);
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    if (activeGoals >= 3) {
+      navigate('/subscribe');
+      return;
+    }
+ 
     try {
       await addDoc(collection(db, 'goals'), {
         userId: user.uid,
@@ -412,4 +443,3 @@ function CreateGoal() {
     }
                        
 export { CreateGoal as default, ColorPicker };
-

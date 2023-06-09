@@ -10,9 +10,10 @@ import Login from './Authentication/login';
 import ForgotPasword from './Authentication/ForgotPasword';
 import CreateGoal from './Dashboard/CreateGoal';
 import GoalDetail from './Dashboard/GoalDetail';
-import UserCalendar from './Calendar/Calendar';
 import MyCalendar from './Calendar/Calendar';
 import Journal from './Dashboard/Journal';
+import Subscribe from './Authentication/Subscribe';
+import UserCalendar from './Calendar/Calendar';
 
 export default function App() {
   return (
@@ -30,8 +31,10 @@ export default function App() {
           <Route path="create-goal" element={<CreateGoal />} />
           <Route path="/goal/:goalId" element={<GoalDetail />} />
           {/* <Route path="/calendar" element={<UserCalendar />} /> */}
-          <Route path="/calendar" element={<MyCalendar />} />
+          <Route path="/calendar" element={<UserCalendar />} />
           <Route path="/journal" element={<Journal /> } />
+          <Route path="/subscribe" element={<Subscribe /> } />
+
         </Routes>
       </Router>
     </div>

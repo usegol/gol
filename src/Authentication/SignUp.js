@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import app, { db } from '../Firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { Mixpanel } from "../Mixpanel";
+import { logEvent } from "firebase/analytics";
+
 
 
 export default function SignUp() {
@@ -35,6 +37,12 @@ function SignUpEmailPassword(props) {
         .then((result) => {
           // The signed-in user info.
           const user = result.user;
+
+          // google analytics log event user created
+          logEvent('user_created', {
+            name: user.displayName,
+            email: user.email
+          });
           
           Mixpanel.track('User Created', {
             name: user.displayName,

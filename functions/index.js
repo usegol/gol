@@ -21,3 +21,20 @@ exports.deleteOldCompletedGoals = functions.pubsub.schedule('every 24 hours').on
 
   return null;
   });
+
+
+exports.createCheckoutSession = functions.https.onCall(async (data, context) => {
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ['card'],
+    line_items: [{
+      price: 'price_ID',
+      quantity: 1,
+    }],
+    mode: 'subscription',
+    success_url: 'https://your-website.com/success',
+    cancel_url: 'https://your-website.com/canceled',
+  });
+
+  return { id: session.id };
+});
+

@@ -17,7 +17,7 @@ const users = {
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', current: true },
     { name: 'Calendar', href: '/calendar', current: false },
-    { name: 'Journal', href: '/journal', current: false },
+    // { name: 'Journal', href: '/journal', current: false },
     // { name: 'Projects', href: '#', current: false },
   ]
   const userNavigation = [
@@ -31,7 +31,7 @@ const users = {
     return classes.filter(Boolean).join(' ')
   }
 
-export default function Dashboard2() {
+export default function Dashboard() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
 

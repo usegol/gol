@@ -5,6 +5,7 @@ import Footer from './Footer'
 import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { Mixpanel } from '../Mixpanel';
+import { logEvent } from 'firebase/analytics';
 
 const incentives = [
   {
@@ -31,10 +32,12 @@ export default function LandingPage() {
 
   useEffect(() => {
     const auth = getAuth();
+    logEvent(auth, 'Landing Page Viewed');
     Mixpanel.track('Landing Page Viewed');
 
     const checkAuthAndNavigate = (user) => {
       if (user && localStorage.getItem('rememberMe') === 'true') {
+        logEvent(auth, 'User Signed In');
         Mixpanel.track('User Signed In')
         navigate('/dashboard');
       }
